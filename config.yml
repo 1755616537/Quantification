@@ -1,0 +1,36 @@
+Gin:
+  #输出前缀名
+  QianZhuiMing: "[服务Gin框架]"
+  #自动加载配置分隔符
+  FenGeFu: "0"
+ShuJuKu:
+  #数据库类型
+  Dialect: "mysql"
+  #账号
+  ZhangHao: "root"
+  #密码
+  MiMa: ""
+  #IP地址
+  IP: ""
+  #端口
+  DuanKou: "3306"
+  #输出前缀名
+  QianZhuiMing: "[数据库系统]"
+ZhiLingXiTong:
+  #输出前缀名
+  QianZhuiMing: "[指令系统]"
+MQTT:
+  #输出前缀名
+  QianZhuiMing: "[MQTT]"
+Redis:
+  #输出前缀名
+  QianZhuiMing: "[Redis]"
+  #IP地址
+  IP: ""
+  #端口
+  DuanKou: "6379"
+  #密码
+  MiMa: ""
+Sentinel:
+  #输出前缀名
+  QianZhuiMing: "[Sentinel]"

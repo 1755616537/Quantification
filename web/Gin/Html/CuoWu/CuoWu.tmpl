@@ -1,0 +1,70 @@
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
+<!DOCTYPE html>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="zh-CN">
+  <head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src chrome:; object-src 'none'" />
+    <title>页面载入出错</title>
+    <link rel="stylesheet" href="chrome://browser/skin/aboutNetError.css" type="text/css" media="all" />
+    <!-- If the location of the favicon is changed here, the FAVICON_ERRORPAGE_URL symbol in
+         toolkit/components/places/src/nsFaviconService.h should be updated. -->
+    <link rel="icon" id="favicon" href="chrome://global/skin/icons/warning.svg" />
+    <link rel="localization" href="browser/aboutCertError.ftl" />
+    <link rel="localization" href="browser/nsserrors.ftl" />
+    <link rel="localization" href="branding/brand.ftl" />
+  </head>
+
+  <body dir="ltr" class="illustrated netTimeout neterror">
+
+
+    <!-- ERROR ITEM CONTAINER (removed during loading to avoid bug 39098) -->
+    
+
+    <!-- PAGE CONTAINER (for styling purposes only) -->
+    <div id="errorPageContainer" class="container">
+      <div id="text-container">
+        <!-- Error Title -->
+        <div class="title">
+          <h1 class="title-text" data-l10n-id="netTimeout-title">连接超时</h1>
+        </div>
+
+        <!-- LONG CONTENT (the section most likely to require scrolling) -->
+        <div id="errorLongContent">
+
+          <!-- Short Description -->
+          <div id="errorShortDesc">
+            <p id="errorShortDescText">www.gongjubaike.cn 的服务器响应时间过长。</p>
+          </div>
+
+          <div id="errorShortDesc2">
+              <p id="errorShortDescText2"></p>
+          </div>
+
+          <div id="errorWhatToDoTitle">
+              <p id="errorWhatToDoTitleText"></p>
+          </div>
+
+          <div id="errorWhatToDo">
+              <p id="badStsCertExplanation" hidden="true"><span class="hostname"></span> 启用了被称为 HTTP 严格传输安全（HSTS）的安全策略，Firefox 只能与其建立安全连接。您无法为此网站添加例外，以访问此网站。</p>
+              <p id="errorWhatToDoText"></p>
+          </div>
+
+          <div id="errorWhatToDo2">
+              <p id="errorWhatToDoText2"></p>
+              <p id="badStsCertExplanation" hidden="true"><span class="hostname"></span> 启用了被称为 HTTP 严格传输安全（HSTS）的安全策略，Firefox 只能与其建立安全连接。您无法为此网站添加例外，以访问此网站。</p>
+          </div>
+
+          <!-- Long Description (Note: See netError.dtd for used XHTML tags) -->
+          <div id="errorLongDesc"><ul xmlns="http://www.w3.org/1999/xhtml"> 
+<li>此站点暂时无法使用或者太过忙碌。请过几分钟后再试。</li> 
+<li>如果您无法载入任何网页，请检查您计算机的网络连接状态。</li> 
+<li>如果您的计算机或网络受到防火墙或者代理服务器的保护，请确认已被授权访问网络。</li>
+</ul></div>
+
+  </body>
+  <script src="chrome://browser/content/aboutNetErrorCodes.js"></script>
+  <script src="chrome://browser/content/aboutNetError.js"></script>
+</html>
