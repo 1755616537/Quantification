@@ -13,13 +13,16 @@ require (
 	github.com/unrolled/secure v1.15.0
 )
 
-require github.com/1755616537/utils v0.0.0-20240803195536-82a4bf063d14 // indirect
+require (
+	github.com/1755616537/utils v0.0.0-20240804135443-b7a667468696 // indirect
+	github.com/dablelv/cyan v0.0.54 // indirect
+)
 
 require (
 	gitee.com/quant1x/exchange v0.5.8 // indirect
 	gitee.com/quant1x/gox v1.21.4 // indirect
 	gitee.com/quant1x/num v0.3.4 // indirect
-	gitee.com/quant1x/pkg v0.2.9 // indirectct
+	gitee.com/quant1x/pkg v0.2.9 // indirect; indirectct
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -40,7 +43,7 @@ require (
 	github.com/go-playground/validator/v10 v10.22.0 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.4+incompatible // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
-	github.com/gogf/gf v1.16.9 // indirect
+	github.com/gogf/gf v1.16.9
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.0 // indirect
 	github.com/google/pprof v0.0.0-20240528025155-186aa0362fba // indirect

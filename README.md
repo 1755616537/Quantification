@@ -26,7 +26,7 @@
 │   │   ├── Public               # 公共配置
 │   │   ├── static               # 公共文件
 │   │   ├── WebSocket            # 长连接
-│   │   ├── Middleware        # 中间件
+│   │   ├── Middleware           # 中间件
 │   │   └── Run.go               # 入口
 │   ├── Sentinel             # 限流控制
 │   │   └── Run.go               # 入口
