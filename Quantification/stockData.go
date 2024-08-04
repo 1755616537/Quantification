@@ -152,7 +152,7 @@ type Snapshot struct {
 	upTime time.Time
 
 	//快照数据
-	data quotes.Snapshot
+	Data quotes.Snapshot
 }
 
 // 判断 是否为空
@@ -160,7 +160,7 @@ func (s *Snapshot) IsEmpty() bool {
 	if s == nil {
 		return true
 	}
-	return s.upTime.IsZero() || s.data == quotes.Snapshot{}
+	return s.upTime.IsZero() || s.Data == quotes.Snapshot{}
 }
 
 func (s *Snapshot) Get() *Snapshot {

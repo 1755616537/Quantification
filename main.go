@@ -49,7 +49,7 @@ func main() {
 	defer web.Exit()
 	//
 	////web服务器
-	//web.Run()
+	web.Run()
 
 	//量化程序
 	Quantification.Run()

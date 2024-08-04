@@ -34,3 +34,9 @@ func CodeTypeTyN(code string) string {
 
 	return ""
 }
+
+// 涨跌幅，计算
+func CalculateChange(currentPrice float64, previousClosePrice float64) float64 {
+	change := (currentPrice - previousClosePrice) / previousClosePrice * 100
+	return change
+}

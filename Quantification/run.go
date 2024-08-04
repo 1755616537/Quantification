@@ -829,13 +829,13 @@ func Run() {
 				if snapshot == nil {
 					continue
 				}
-				卖档1金额 := float64(snapshot.data.AskVol1) * snapshot.data.Ask1
+				卖档1金额 := float64(snapshot.Data.AskVol1) * snapshot.Data.Ask1
 				if 卖档1金额 >= 卖金额阈值 {
-					监控列表add(监控列表_data{"开盘竞价量监控-卖", snapshot.data.Code})
+					监控列表add(监控列表_data{"开盘竞价量监控-卖", snapshot.Data.Code})
 				}
-				买档1金额 := float64(snapshot.data.BidVol1) * snapshot.data.Bid1
+				买档1金额 := float64(snapshot.Data.BidVol1) * snapshot.Data.Bid1
 				if 买档1金额 >= 买金额阈值 {
-					监控列表add(监控列表_data{"开盘竞价量监控-买", snapshot.data.Code})
+					监控列表add(监控列表_data{"开盘竞价量监控-买", snapshot.Data.Code})
 				}
 			}
 		}

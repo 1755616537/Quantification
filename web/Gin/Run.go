@@ -8,8 +8,11 @@ import (
 	"github.com/alibaba/sentinel-golang/core/base"
 	"github.com/gin-gonic/gin"
 	"github.com/patrickmn/go-cache"
+	"html/template"
 	"net/http"
 	"strings"
+	"tdx/Quantification"
+	Public2 "tdx/Quantification/Public"
 	Public4 "tdx/web/Gin/Api/Public"
 	ZhongJianJian2 "tdx/web/Gin/Middleware"
 	"tdx/web/Gin/Public"
@@ -166,16 +169,30 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 	//设置日记输出场景类型
 	//gin.SetMode(gin.ReleaseMode)
 
+	//注册全局模板函数 注意顺序，注册模板函数需要在加载模板上面
+	router.SetFuncMap(template.FuncMap{
+		"GetQuData": func(code string) string {
+			return fmt.Sprint(Quantification.QuData[code].Snapshot.Data.Price)
+		},
+		"CalculateChange": func(code string) string {
+			calculateChange := Public2.CalculateChange(
+				Quantification.QuData[code].Snapshot.Data.Price,
+				Quantification.QuData[code].Snapshot.Data.LastClose,
+			)
+			return fmt.Sprintf("%.2f", calculateChange)
+		},
+	})
+
 	//静态目录
 	router.Static("/static", "./web/Gin/Static")
 	//router.Static("/static", "/go/web/Gin/static")
 	//静态目录 显示文件列表
-	router.StaticFS("/public", http.Dir("web/Gin/Static"))
+	router.StaticFS("/public", http.Dir("./web/Gin/Static"))
 	//router.StaticFS("/public", http.Dir("/go/web/Gin/static"))
 	//静态文件
 	//router.StaticFile("/.well-known/pki-validation/fileauth.txt", "Gin/Static/fileauth.txt")
 	//Html目录 模板
-	router.LoadHTMLGlob("web/Gin/Html/**/*")
+	router.LoadHTMLGlob("./web/Gin/Html/**/*")
 	//单个Html
 	//router.LoadHTMLFiles("Gin/Help/1/1.html")
 
@@ -198,6 +215,14 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 	//错误页面
 	router.GET("/CuoWu/*action", func(context *gin.Context) {
 		context.HTML(http.StatusInternalServerError, "CuoWu.tmpl", gin.H{})
+	})
+
+	//首页
+	router.GET("/", func(context *gin.Context) {
+		context.HTML(http.StatusOK, "trendThumbnail/index.tmpl", gin.H{
+			"QuZXGArrs": Quantification.Qu_ZXG_Arrs,
+			"QuData":    Quantification.QuData,
+		})
 	})
 
 	//api

@@ -2,11 +2,12 @@
   @apply font-bold;
   border: 4px solid #25262b;
   background: #fff;
-  position: fixed;
+  /*position: fixed;*/
   min-width: 300px;
-  overflow: hidden;
-  z-index: 10000;
+  /*overflow: hidden;*/
+  /*z-index: 10000;*/
   font-size: 14px;
+  width: 100px;
 
   h3 {
     font-size: 13.5px;
