@@ -7,6 +7,7 @@ import (
 	"gitee.com/quant1x/gotdx"
 	"gitee.com/quant1x/gotdx/proto"
 	"gitee.com/quant1x/gotdx/quotes"
+	"gitee.com/quant1x/gotdx/securities"
 	"github.com/1755616537/utils"
 	"github.com/gogf/gf/encoding/gjson"
 	"io/ioutil"
@@ -47,8 +48,8 @@ func init() {
 
 	var err error
 
-	//Qu_ZXGx_Arrs, Qu_ZXG_Arrs, err := ZXGGet("C:\\通达信\\T0002\\blocknew/ZXG.blk")
-	Qu_ZXGx_Arrs, Qu_ZXG_Arrs, err = ZXGGet("C:\\Users\\17556\\Desktop/1.txt")
+	Qu_ZXGx_Arrs, Qu_ZXG_Arrs, err = ZXGGet("C:\\通达信\\T0002\\blocknew/ZXG.blk")
+	//Qu_ZXGx_Arrs, Qu_ZXG_Arrs, err = ZXGGet("C:\\Users\\17556\\Desktop/1.txt")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -377,7 +378,7 @@ func Exit() {
 						}
 					}
 
-					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_5MIN.Get().data.List).MustToJsonString()
+					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_5MIN.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(json, fmt.Sprint(fileUrl, "/KLINE_TYPE_5MIN.json"))
 					if err != nil {
 						fmt.Println("保存", code, "KLINE_TYPE_5MIN", "失败-"+err.Error())
@@ -396,7 +397,7 @@ func Exit() {
 						}
 					}
 
-					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_15MIN.Get().data.List).MustToJsonString()
+					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_15MIN.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(json, fmt.Sprint(fileUrl, "/KLINE_TYPE_15MIN.json"))
 					if err != nil {
 						fmt.Println("保存", code, "KLINE_TYPE_15MIN", "失败-"+err.Error())
@@ -415,7 +416,7 @@ func Exit() {
 						}
 					}
 
-					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_30MIN.Get().data.List).MustToJsonString()
+					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_30MIN.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(json, fmt.Sprint(fileUrl, "/KLINE_TYPE_30MIN.json"))
 					if err != nil {
 						fmt.Println("保存", code, "KLINE_TYPE_30MIN", "失败-"+err.Error())
@@ -434,7 +435,7 @@ func Exit() {
 						}
 					}
 
-					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_1HOUR.Get().data.List).MustToJsonString()
+					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_1HOUR.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(json, fmt.Sprint(fileUrl, "/KLINE_TYPE_1HOUR.json"))
 					if err != nil {
 						fmt.Println("保存", code, "KLINE_TYPE_1HOUR", "失败-"+err.Error())
@@ -453,7 +454,7 @@ func Exit() {
 						}
 					}
 
-					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_DAILY.Get().data.List).MustToJsonString()
+					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_DAILY.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(json, fmt.Sprint(fileUrl, "/KLINE_TYPE_DAILY.json"))
 					if err != nil {
 						fmt.Println("保存", code, "KLINE_TYPE_DAILY", "失败-"+err.Error())
@@ -472,7 +473,7 @@ func Exit() {
 						}
 					}
 
-					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_WEEKLY.Get().data.List).MustToJsonString()
+					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_WEEKLY.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(json, fmt.Sprint(fileUrl, "/KLINE_TYPE_WEEKLY.json"))
 					if err != nil {
 						fmt.Println("保存", code, "KLINE_TYPE_WEEKLY", "失败-"+err.Error())
@@ -491,7 +492,7 @@ func Exit() {
 						}
 					}
 
-					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_MONTHLY.Get().data.List).MustToJsonString()
+					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_MONTHLY.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(json, fmt.Sprint(fileUrl, "/KLINE_TYPE_MONTHLY.json"))
 					if err != nil {
 						fmt.Println("保存", code, "KLINE_TYPE_MONTHLY", "失败-"+err.Error())
@@ -510,7 +511,7 @@ func Exit() {
 						}
 					}
 
-					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_1MIN.Get().data.List).MustToJsonString()
+					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_1MIN.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(json, fmt.Sprint(fileUrl, "/KLINE_TYPE_1MIN.json"))
 					if err != nil {
 						fmt.Println("保存", code, "KLINE_TYPE_1MIN", "失败-"+err.Error())
@@ -529,7 +530,7 @@ func Exit() {
 						}
 					}
 
-					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_3MONTH.Get().data.List).MustToJsonString()
+					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_3MONTH.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(json, fmt.Sprint(fileUrl, "/KLINE_TYPE_3MONTH.json"))
 					if err != nil {
 						fmt.Println("保存", code, "KLINE_TYPE_3MONTH", "失败-"+err.Error())
@@ -548,7 +549,7 @@ func Exit() {
 						}
 					}
 
-					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_YEARLY.Get().data.List).MustToJsonString()
+					json := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_YEARLY.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(json, fmt.Sprint(fileUrl, "/KLINE_TYPE_YEARLY.json"))
 					if err != nil {
 						fmt.Println("保存", code, "KLINE_TYPE_YEARLY", "失败-"+err.Error())
@@ -571,7 +572,7 @@ func Exit() {
 					for key := range quData.MinuteTimeReply {
 						minuteTimeReply := quData.MinuteTimeReply[key]
 
-						json := gjson.New(minuteTimeReply.Get().data.List).MustToJsonString()
+						json := gjson.New(minuteTimeReply.Get().Data.List).MustToJsonString()
 						err := utils.Setfile(json, fmt.Sprint(fileUrl, "/", key, ".json"))
 						if err != nil {
 							fmt.Println("保存", code, key, "MinuteTimeReply", "失败-"+err.Error())
@@ -595,7 +596,7 @@ func Exit() {
 					for key := range quData.TransactionReply {
 						transactionReply := quData.TransactionReply[key]
 
-						json := gjson.New(transactionReply.Get().data.List).MustToJsonString()
+						json := gjson.New(transactionReply.Get().Data.List).MustToJsonString()
 						err := utils.Setfile(json, fmt.Sprint(fileUrl, "/", key, ".json"))
 						if err != nil {
 							fmt.Println("保存", code, key, "TransactionReply", "失败-"+err.Error())
@@ -615,16 +616,22 @@ func Run() {
 
 	//获取QuData
 	go func() {
-		snapshot, err := Api.GetSnapshot(Qu_ZXG_Arrs)
+		arrs := utils.SplitSliceIntoChunks(Qu_ZXG_Arrs, quotes.TDX_SECURITY_QUOTES_MAX)
+		for _, arr := range arrs {
+			snapshot, err := Api.GetSnapshot(arr)
 
-		if err == nil {
-			for i := 0; i < len(snapshot); i++ {
-				quData := QuDataGet(snapshot[i].Code)
-				if !quData.IsEmpty() {
-					quData.SetSnapshot(Snapshot{
-						time.Now(),
-						snapshot[i],
-					})
+			//time.Sleep(time.Second * 1)
+
+			if err == nil {
+				for i := 0; i < len(snapshot); i++ {
+					quData := QuDataGet(snapshot[i].Code)
+					if !quData.IsEmpty() {
+						quData.SetSnapshot(Snapshot{
+							time.Now(),
+							snapshot[i],
+							securities.GetStockName(snapshot[i].Code),
+						})
+					}
 				}
 			}
 		}
@@ -680,7 +687,7 @@ func Run() {
 			}
 
 			//历史分时图数据
-			dateAoArr, err := utils.DateAoArr(time.Now(), HistoryMinuteTimeDataGetMxLen)
+			dateAoArr, err := utils.DateAoArr(time.Now(), HistoryMinuteTimeDataGetMxLen, true)
 			if err == nil {
 				for i := 0; i < len(dateAoArr); i++ {
 					dateAo := dateAoArr[i]
@@ -708,7 +715,7 @@ func Run() {
 			}
 
 			//历史分时成交
-			dateAoArr, err = utils.DateAoArr(time.Now(), HistoryTransactionDataGetMxLen)
+			dateAoArr, err = utils.DateAoArr(time.Now(), HistoryTransactionDataGetMxLen, true)
 			if err == nil {
 				for i := 0; i < len(dateAoArr); i++ {
 					dateAo := dateAoArr[i]

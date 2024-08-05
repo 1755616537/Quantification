@@ -7,6 +7,7 @@ import (
 	sentinel "github.com/alibaba/sentinel-golang/api"
 	"github.com/alibaba/sentinel-golang/core/base"
 	"github.com/gin-gonic/gin"
+	"github.com/gogf/gf/encoding/gjson"
 	"github.com/patrickmn/go-cache"
 	"html/template"
 	"net/http"
@@ -172,14 +173,56 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 	//注册全局模板函数 注意顺序，注册模板函数需要在加载模板上面
 	router.SetFuncMap(template.FuncMap{
 		"GetQuData": func(code string) string {
+			return fmt.Sprint(Quantification.QuData[code])
+		},
+		"GetQuDataPrice": func(code string) string {
 			return fmt.Sprint(Quantification.QuData[code].Snapshot.Data.Price)
 		},
-		"CalculateChange": func(code string) string {
+		"GetQuDataStockName": func(code string) string {
+			return fmt.Sprint(Quantification.QuData[code].Snapshot.StockName)
+		},
+		"CalculateChange": func(code string) template.HTML {
 			calculateChange := Public2.CalculateChange(
 				Quantification.QuData[code].Snapshot.Data.Price,
 				Quantification.QuData[code].Snapshot.Data.LastClose,
 			)
-			return fmt.Sprintf("%.2f", calculateChange)
+			var t string
+			if Quantification.QuData[code].Snapshot.Data.Price >= Quantification.QuData[code].Snapshot.Data.LastClose {
+				t = fmt.Sprint(
+					`<td class="change" style="color: rgb(59, 90, 80);width: 70px;">+`,
+					fmt.Sprintf("%.2f", calculateChange),
+					`%</td>`,
+				)
+			} else {
+				t = fmt.Sprint(
+					`<td class="change" style="color: rgb(47, 158, 79);width: 70px;">`,
+					fmt.Sprintf("%.2f", calculateChange),
+					`%</td>`,
+				)
+			}
+			return template.HTML(t)
+		},
+		"GetQuDataMinuteTimeReply": func(code string) string {
+			date, err := utils.DateTyUint32(time.Now())
+			if err != nil {
+				return ""
+			}
+			minuteTimeReply := Quantification.QuData[code].GetMinuteTimeReply(date)
+			if minuteTimeReply == nil {
+				return ""
+			}
+			list := minuteTimeReply.Data.List
+			if len(list) > 36 {
+				//list = list[:36]
+			}
+			var prices []string
+			for i := 0; i < len(list); i++ {
+				prices = append(prices, fmt.Sprint(list[i].Price))
+			}
+			return gjson.New(prices).MustToJsonString()
+		},
+		"jsx": func(s string) template.JS {
+			return template.JS(strings.ReplaceAll(s, `"`, `\"`))
 		},
 	})
 
@@ -222,6 +265,20 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 		context.HTML(http.StatusOK, "trendThumbnail/index.tmpl", gin.H{
 			"QuZXGArrs": Quantification.Qu_ZXG_Arrs,
 			"QuData":    Quantification.QuData,
+			"js": fmt.Sprint(
+				`
+console.log('Hello from dynamic JS!');
+				`,
+				//`var data = '<svg
+				//class='sparkline'
+				//width='+width+'
+				//height='+height+'
+				//>
+				//<g transform='translate(0, 2)'>
+				//<path d='+line(data)+'!} />
+				//</g>
+				//</svg>';`,
+			),
 		})
 	})
 

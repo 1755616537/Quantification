@@ -14,7 +14,7 @@ require (
 )
 
 require (
-	github.com/1755616537/utils v0.0.0-20240804135443-b7a667468696 // indirect
+	github.com/1755616537/utils v0.0.0-20240805120723-f225e8fee492 // indirect
 	github.com/dablelv/cyan v0.0.54 // indirect
 )
 
@@ -70,11 +70,11 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	go.opentelemetry.io/otel v1.28.0 // indirect
 	go.opentelemetry.io/otel/trace v1.28.0 // indirect
-	golang.org/x/arch v0.8.0 // indirect
+	golang.org/x/arch v0.9.0 // indirect
 	golang.org/x/crypto v0.25.0 // indirect
 	golang.org/x/image v0.18.0 // indirect
 	golang.org/x/net v0.27.0 // indirect
-	golang.org/x/sys v0.22.0 // indirect
+	golang.org/x/sys v0.23.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect

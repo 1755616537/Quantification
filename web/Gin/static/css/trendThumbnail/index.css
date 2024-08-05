@@ -3,11 +3,13 @@
   border: 4px solid #25262b;
   background: #fff;
   /*position: fixed;*/
-  min-width: 300px;
+  /*min-width: 300px;*/
   /*overflow: hidden;*/
   /*z-index: 10000;*/
   font-size: 14px;
-  width: 100px;
+  /*width: 350px;*/
+
+  font-weight: 700;
 
   h3 {
     font-size: 13.5px;
@@ -20,11 +22,25 @@
   }
 
   table {
-    width: 100.1%;
+    /*width: 100.1%;*/
+    border-collapse: collapse;
+    table-layout: fixed;
 
     tr {
       border-bottom: 2px solid #e3e4e9;
-      height: 30px;
+      /*height: 30px;*/
+
+      /*width: 300px;*/
+      /*display: flex;*/
+      /*flex-wrap: wrap;*/
+      /*align-content: flex-start;*/
+      /*white-space: nowrap;*/
+
+      display:block;
+      float: left;
+
+      border-top: 1px solid #25262b;
+      border-right: 1px solid #25262b;
     }
 
     tr:last-child {
@@ -33,6 +49,7 @@
 
     .ticker {
       padding-left: 10px;
+      padding-right: 5px;
     }
 
     .price {
@@ -49,13 +66,14 @@
     .hovered {
       color: #fff;
       font-size: 21px;
-      border-bottom: none;
-      height: 21px;
+      /*border-bottom: none;*/
+      /*height: 21px;*/
 
       td {
         padding-top: 14px;
+        padding-bottom: 14px;
         line-height: 18px;
-        height: 40px;
+        /*height: 40px;*/
       }
 
       &.is-description {

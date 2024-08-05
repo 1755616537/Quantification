@@ -6,9 +6,36 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/static/css/trendThumbnail/index.css">
+    <script src = "http://d3js.org/d3.v5.min.js"></script>
 </head>
-<body>
+<body style="margin: 0;padding: 0;">
 {{template "trendThumbnail/bar.html" .}}
+<script type="text/javascript">
+    var d_hover = document.getElementById('hover');
+    var d_trArr = d_hover.getElementsByTagName('tr');
+    for (let ix = 0; ix < d_trArr.length; ix++) {
+        var d_td2 = d_trArr[ix].getElementsByTagName('td');
+        var d_svg = d_td2[1].getElementsByTagName('svg');
+        var d_svg_data = d_svg[0].getAttribute('data-v');
+        var d_svg_width = d_svg[0].getAttribute('width');
+        var d_svg_height = d_svg[0].getAttribute('height');
+        console.log(d_svg_data);
+        d_svg_data = JSON.parse(d_svg_data);
+        // d_svg_data=[175.15,175.45,176.15,175.82,178.02,177.41,178.06,179.79,180.9,179.87,179.46,183.11,182.19,180.31,181.08,182.09,179.27,177.99,173.38,171.15,170.48,172.9,171.23,173.89,173.49,173.2,171.04,165.9,165.07,163.83,163.33,163.81,166.14,166.48,166.68,167.28,168.08,167.35,166.74,166.26,164.93,162.89,163.58,162.6,164.39,162.12,161.9,163.59,163.95,166.38,163.86,164.76,169.89,170.37,169.36,167.66,166.28,168.17,171.02,172.75,173.21,173.18,172.67,174.96,178.04];
+        var x = d3.scaleLinear().range([0,d_svg_width]).domain([0, d_svg_data.length]);
+        var y = d3.scaleLinear().range([d_svg_height - 4, 0]).domain(d3.extent(d_svg_data, (d) => d));
+        var line = d3.line().curve(d3.curveBasis).x((d, i) => x(i)).y((d) => y(d));
+        var lineData = line(d_svg_data);
+        console.log(lineData);
+
+        var d_g = d_svg[0].getElementsByTagName('g');
+        var d_path = d_g[0].getElementsByTagName('path');
+        d_path[0].setAttribute('d',lineData);
+    }
+
+
+    {{ jsx .js }}
+</script>
 </body>
 </html>
 {{end}}

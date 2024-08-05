@@ -9,6 +9,43 @@ import (
 // 股票数据
 var QuData = make(map[string]*QuData_data)
 
+//Code: 股票代码
+//LiuTongGuBen: 流通股本
+//Province: 所属省份
+//Industry: 行业分类
+//UpdatedDate: 数据更新日期
+//IPODate: 首次公开募股 (IPO) 日期
+//ZongGuBen: 总股本
+//GuoJiaGu: 国家股
+//FaQiRenFaRenGu: 发起人法人股
+//FaRenGu: 法人股
+//BGu: B股
+//HGu: H股
+//ZhiGongGu: 职工股
+//ZongZiChan: 总资产
+//LiuDongZiChan: 流动资产
+//GuDingZiChan: 固定资产
+//WuXingZiChan: 无形资产
+//GuDongRenShu: 股东人数
+//LiuDongFuZhai: 流动负债
+//ChangQiFuZhai: 长期负债
+//ZiBenGongJiJin: 资本公积金
+//JingZiChan: 净资产
+//ZhuYingShouRu: 主营业务收入
+//ZhuYingLiRun: 主营业务利润
+//YingShouZhangKuan: 应收账款
+//YingyeLiRun: 营业利润
+//TouZiShouYu: 投资收益
+//JingYingxianJinLiu: 经营活动产生的现金流量
+//ZongXianJinLiu: 总现金流量
+//CunHuo: 存货
+//LiRunZongHe: 利润总额
+//ShuiHouLiRun: 税后利润
+//JingLiRun: 净利润
+//WeiFenLiRun: 未分配利润
+//MeiGuJingZiChan: 每股净资产
+//BaoLiu2: 保留字段2
+
 // 股票数据 获取
 func QuDataGet(code string) *QuData_data {
 	date, ok := QuData[code]
@@ -149,10 +186,13 @@ func (s *QuData_data) SetXdxrInfo(d XdxrInfo) {
 
 type Snapshot struct {
 	//更新时间
-	upTime time.Time
+	UpTime time.Time
 
 	//快照数据
 	Data quotes.Snapshot
+
+	//股票名称
+	StockName string
 }
 
 // 判断 是否为空
@@ -160,7 +200,7 @@ func (s *Snapshot) IsEmpty() bool {
 	if s == nil {
 		return true
 	}
-	return s.upTime.IsZero() || s.Data == quotes.Snapshot{}
+	return s.UpTime.IsZero() || s.Data == quotes.Snapshot{}
 }
 
 func (s *Snapshot) Get() *Snapshot {
@@ -172,10 +212,10 @@ func (s *Snapshot) Get() *Snapshot {
 
 type FinanceInfo struct {
 	//更新时间
-	upTime time.Time
+	UpTime time.Time
 
 	//基本面
-	data *quotes.FinanceInfo
+	Data *quotes.FinanceInfo
 }
 
 // 判断 是否为空
@@ -183,7 +223,7 @@ func (s *FinanceInfo) IsEmpty() bool {
 	if s == nil {
 		return true
 	}
-	return s.upTime.IsZero() || s.data == nil
+	return s.UpTime.IsZero() || s.Data == nil
 }
 
 func (s *FinanceInfo) Get() *FinanceInfo {
@@ -195,10 +235,10 @@ func (s *FinanceInfo) Get() *FinanceInfo {
 
 type MinuteTimeReply struct {
 	//更新时间
-	upTime time.Time
+	UpTime time.Time
 
 	//分时图数据
-	data *quotes.MinuteTimeReply
+	Data *quotes.MinuteTimeReply
 }
 
 // 判断 是否为空
@@ -206,7 +246,7 @@ func (s *MinuteTimeReply) IsEmpty() bool {
 	if s == nil {
 		return true
 	}
-	return s.upTime.IsZero() || s.data == nil
+	return s.UpTime.IsZero() || s.Data == nil
 }
 
 func (s *MinuteTimeReply) Get() *MinuteTimeReply {
@@ -218,10 +258,10 @@ func (s *MinuteTimeReply) Get() *MinuteTimeReply {
 
 type TransactionReply struct {
 	//更新时间
-	upTime time.Time
+	UpTime time.Time
 
 	//分时成交
-	data *quotes.TransactionReply
+	Data *quotes.TransactionReply
 }
 
 // 判断 是否为空
@@ -229,7 +269,7 @@ func (s *TransactionReply) IsEmpty() bool {
 	if s == nil {
 		return true
 	}
-	return s.upTime.IsZero() || s.data == nil
+	return s.UpTime.IsZero() || s.Data == nil
 }
 
 func (s *TransactionReply) Get() *TransactionReply {
@@ -241,10 +281,10 @@ func (s *TransactionReply) Get() *TransactionReply {
 
 type XdxrInfo struct {
 	//更新时间
-	upTime time.Time
+	UpTime time.Time
 
 	//除权除息信息
-	data []quotes.XdxrInfo
+	Data []quotes.XdxrInfo
 }
 
 // 判断 是否为空
@@ -252,7 +292,7 @@ func (s *XdxrInfo) IsEmpty() bool {
 	if s == nil {
 		return true
 	}
-	return s.upTime.IsZero() || s.data == nil
+	return s.UpTime.IsZero() || s.Data == nil
 }
 
 func (s *XdxrInfo) Get() *XdxrInfo {
@@ -287,10 +327,10 @@ type SecurityBarsReply_data struct {
 
 type SecurityBarsReply_data_KLINE_TYPE struct {
 	//更新时间
-	upTime time.Time
+	UpTime time.Time
 
 	//K线
-	data *quotes.SecurityBarsReply
+	Data *quotes.SecurityBarsReply
 }
 
 // 判断 是否为空
@@ -298,7 +338,7 @@ func (s *SecurityBarsReply_data_KLINE_TYPE) IsEmpty() bool {
 	if s == nil {
 		return true
 	}
-	return s.upTime.IsZero() || s.data == nil
+	return s.UpTime.IsZero() || s.Data == nil
 }
 
 func (s *SecurityBarsReply_data_KLINE_TYPE) Get() *SecurityBarsReply_data_KLINE_TYPE {
