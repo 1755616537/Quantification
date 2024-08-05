@@ -3,6 +3,7 @@ package Gin
 import (
 	"errors"
 	"fmt"
+	"gitee.com/quant1x/gotdx/quotes"
 	"github.com/1755616537/utils"
 	sentinel "github.com/alibaba/sentinel-golang/api"
 	"github.com/alibaba/sentinel-golang/core/base"
@@ -203,15 +204,21 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 			return template.HTML(t)
 		},
 		"GetQuDataMinuteTimeReply": func(code string) string {
-			date, err := utils.DateTyUint32(time.Now())
+			date := time.Now()
+			dateArr, err := utils.DateAoArr(date, 2, true)
 			if err != nil {
 				return ""
 			}
-			minuteTimeReply := Quantification.QuData[code].GetMinuteTimeReply(date)
-			if minuteTimeReply == nil {
-				return ""
+			var minuteTimes []quotes.MinuteTime
+			for i := len(dateArr) - 1; i >= 0; i-- {
+				minuteTimeReply := Quantification.QuData[code].GetMinuteTimeReply(dateArr[i])
+				if minuteTimeReply == nil {
+					return ""
+				}
+				minuteTimes = append(minuteTimes, minuteTimeReply.Get().Data.List...)
 			}
-			list := minuteTimeReply.Data.List
+
+			list := minuteTimes
 			if len(list) > 36 {
 				//list = list[:36]
 			}
