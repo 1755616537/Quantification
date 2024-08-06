@@ -10,7 +10,6 @@ import (
 	"github.com/alibaba/sentinel-golang/core/base"
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/encoding/gjson"
-	"github.com/gogf/gf/util/grand"
 	"github.com/patrickmn/go-cache"
 	"html/template"
 	"io/ioutil"
@@ -201,7 +200,7 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 			if price == exchange.LimitUp(code, lastClose) {
 				//涨停
 				t = fmt.Sprint(
-					`<td class="change" style="color: rgb(255,255,0);width: 55px;">`,
+					`<td class="change" style="color: rgb(200,200,0);width: 55px;">`,
 					fmt.Sprintf("%.2f", calculateChange),
 					`%</td>`,
 				)
@@ -268,14 +267,29 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 			return gjson.New(prices).MustToJsonString()
 		},
 		"styleBorder1": func(code string) template.CSS {
-			if grand.Meet(10, 100) {
+			data := Quantification.QuData[code].Snapshot.Data
+			if data.Rate > 1 {
 				return template.CSS("border-top: 1px solid rgb(255,0,0);border-bottom: 1px solid rgb(255,0,0);")
+			} else if data.Rate < -1 {
+				return template.CSS("border-top: 1px solid rgb(8,255,0);border-bottom: 1px solid rgb(8,255,0);")
 			}
 			return template.CSS("")
 		},
 		"styleBorder2": func(code string) template.CSS {
-			if grand.Meet(10, 100) {
+			data := Quantification.QuData[code].Snapshot.Data
+			if data.Rate > 1 {
 				return template.CSS("color: rgb(255,0,0);")
+			} else if data.Rate < -1 {
+				return template.CSS("color: rgb(8,255,0);")
+			}
+			return template.CSS("")
+		},
+		"styleBorder3": func(code string) template.CSS {
+			data := Quantification.QuData[code].Snapshot.Data
+			if data.Rate > 1 {
+				return template.CSS("background: rgb(255,0,0);")
+			} else if data.Rate < -1 {
+				return template.CSS("background: rgb(8,255,0);")
 			}
 			return template.CSS("")
 		},
