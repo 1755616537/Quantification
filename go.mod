@@ -14,7 +14,7 @@ require (
 )
 
 require (
-	github.com/1755616537/utils v0.0.0-20240805120723-f225e8fee492 // indirect
+	github.com/1755616537/utils v0.0.0-20240806114328-958d5c7f046d // indirect
 	github.com/dablelv/cyan v0.0.54 // indirect
 )
 
@@ -26,7 +26,7 @@ require (
 	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/bytedance/sonic v1.12.0 // indirect
+	github.com/bytedance/sonic v1.12.1 // indirect
 	github.com/bytedance/sonic/loader v0.2.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/clbanning/mxj v1.8.5-0.20200714211355-ff02cfb8ea28 // indirect

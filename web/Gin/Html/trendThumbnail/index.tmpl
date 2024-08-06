@@ -35,7 +35,7 @@
                 table-layout: fixed;
 
                 tr {
-                    border-bottom: 2px solid #e3e4e9;
+                    border-bottom: 1px solid #e3e4e9;
                     /*height: 30px;*/
 
                     /*width: 300px;*/
@@ -211,13 +211,13 @@
                 var calculateChange = quDataMinuteTimeReplyfunc[code];
                 if (currentPrice >= previousClosePrice) {
                     calculateChange =
-                        '<td class="change" style="color: rgb(59, 90, 80);width: 70px;">+' +
+                        '<td class="change" style="color: rgb(255,0,0);width: 70px;">+' +
                         calculateChange +
                         change +
                         '%</td>';
                 } else {
                     calculateChange =
-                        '<td class="change" style="color: rgb(47, 158, 79);width: 70px;">' +
+                        '<td class="change" style="color: rgb(8,255,0);width: 70px;">' +
                         calculateChange +
                         change +
                         '%</td>';

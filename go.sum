@@ -20,6 +20,10 @@ github.com/1755616537/utils v0.0.0-20240805101321-b94046ee0945 h1:rVXg7XsGYXicUL
 github.com/1755616537/utils v0.0.0-20240805101321-b94046ee0945/go.mod h1:kU8estWO3RbLnCu7NpZW8uW3LWLuCjTdd3FANtkZqJI=
 github.com/1755616537/utils v0.0.0-20240805120723-f225e8fee492 h1:o4BC4WUdMACmeSwoglhFoV34yAp4XSRhWxkGS9aLD9g=
 github.com/1755616537/utils v0.0.0-20240805120723-f225e8fee492/go.mod h1:kU8estWO3RbLnCu7NpZW8uW3LWLuCjTdd3FANtkZqJI=
+github.com/1755616537/utils v0.0.0-20240806111717-16c905d60663 h1:FLyWb4ckCm+UcrPX05zQrmTRNOj9Y9z5jo5KezjWVoQ=
+github.com/1755616537/utils v0.0.0-20240806111717-16c905d60663/go.mod h1:kU8estWO3RbLnCu7NpZW8uW3LWLuCjTdd3FANtkZqJI=
+github.com/1755616537/utils v0.0.0-20240806114328-958d5c7f046d h1:6I2mRSIi8uYo+xFSG8bUDCX68nH8oIAQM9xCbHp3sLg=
+github.com/1755616537/utils v0.0.0-20240806114328-958d5c7f046d/go.mod h1:kU8estWO3RbLnCu7NpZW8uW3LWLuCjTdd3FANtkZqJI=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/toml v1.4.0 h1:kuoIxZQy2WRRk1pttg9asf+WVv6tWQuBNVmK8+nqPr0=
 github.com/BurntSushi/toml v1.4.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
@@ -53,6 +57,8 @@ github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6r
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/bytedance/sonic v1.12.0 h1:YGPgxF9xzaCNvd/ZKdQ28yRovhfMFZQjuk6fKBzZ3ls=
 github.com/bytedance/sonic v1.12.0/go.mod h1:B8Gt/XvtZ3Fqj+iSKMypzymZxw/FVwgIGKzMzT9r/rk=
+github.com/bytedance/sonic v1.12.1 h1:jWl5Qz1fy7X1ioY74WqO0KjAMtAGQs4sYnjiEBiyX24=
+github.com/bytedance/sonic v1.12.1/go.mod h1:B8Gt/XvtZ3Fqj+iSKMypzymZxw/FVwgIGKzMzT9r/rk=
 github.com/bytedance/sonic/loader v0.1.1/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=
 github.com/bytedance/sonic/loader v0.2.0 h1:zNprn+lsIP06C/IqCHs3gPQIvnvpKbbxyXQP1iU4kWM=
 github.com/bytedance/sonic/loader v0.2.0/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=

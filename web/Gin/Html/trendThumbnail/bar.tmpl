@@ -5,8 +5,8 @@
         <table class="">
             <tbody id="tbody">
             {{range $key,$value := .QuZXGArrs}}
-            <tr>
-                <td class="ticker text-gray-900" style="width: 60px;">{{GetQuDataStockName $value}}</td>
+            <tr style="{{ styleBorder1 $value }}">
+                <td class="ticker text-gray-900" style="width: 60px;{{ styleBorder2 $value }}">{{GetQuDataStockName $value}}</td>
                 <td>
                     <svg class="sparkline" width="65" height="25" data-v="{{GetQuDataMinuteTimeReply $value}}">
                         <g transform="translate(0, 2)">
@@ -14,7 +14,7 @@
                         </g>
                     </svg>
                 </td>
-                <td class="price text-gray-900" style="width: 50px;">{{GetQuDataPrice $value}}</td>
+                <td class="price text-gray-900" style="width: 40px;">{{GetQuDataPrice $value}}</td>
                 {{CalculateChange $value}}
             </tr>
             {{end}}

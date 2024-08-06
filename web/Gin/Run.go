@@ -3,12 +3,14 @@ package Gin
 import (
 	"errors"
 	"fmt"
+	"gitee.com/quant1x/exchange"
 	"gitee.com/quant1x/gotdx/quotes"
 	"github.com/1755616537/utils"
 	sentinel "github.com/alibaba/sentinel-golang/api"
 	"github.com/alibaba/sentinel-golang/core/base"
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/encoding/gjson"
+	"github.com/gogf/gf/util/grand"
 	"github.com/patrickmn/go-cache"
 	"html/template"
 	"io/ioutil"
@@ -189,23 +191,43 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 			return fmt.Sprint(Quantification.QuData[code].Snapshot.StockName)
 		},
 		"CalculateChange": func(code string) template.HTML {
+			price := Quantification.QuData[code].Snapshot.Data.Price
+			lastClose := Quantification.QuData[code].Snapshot.Data.LastClose
 			calculateChange := utils.CalculateChange(
-				Quantification.QuData[code].Snapshot.Data.Price,
-				Quantification.QuData[code].Snapshot.Data.LastClose,
+				price,
+				lastClose,
 			)
 			var t string
-			if Quantification.QuData[code].Snapshot.Data.Price >= Quantification.QuData[code].Snapshot.Data.LastClose {
+			if price == exchange.LimitUp(code, lastClose) {
+				//涨停
 				t = fmt.Sprint(
-					`<td class="change" style="color: rgb(59, 90, 80);width: 70px;">+`,
+					`<td class="change" style="color: rgb(255,255,0);width: 55px;">`,
+					fmt.Sprintf("%.2f", calculateChange),
+					`%</td>`,
+				)
+			} else if price == utils.CalculateLimitDownPrice2(lastClose, exchange.MarketLimit(code)) {
+				//跌停
+				t = fmt.Sprint(
+					`<td class="change" style="color: rgb(0,34,255);width: 55px;">`,
 					fmt.Sprintf("%.2f", calculateChange),
 					`%</td>`,
 				)
 			} else {
-				t = fmt.Sprint(
-					`<td class="change" style="color: rgb(47, 158, 79);width: 70px;">`,
-					fmt.Sprintf("%.2f", calculateChange),
-					`%</td>`,
-				)
+				//上涨
+				if price >= lastClose {
+					t = fmt.Sprint(
+						`<td class="change" style="color: rgb(255,0,0);width: 55px;">+`,
+						fmt.Sprintf("%.2f", calculateChange),
+						`%</td>`,
+					)
+				} else {
+					//下跌
+					t = fmt.Sprint(
+						`<td class="change" style="color: rgb(8,255,0);width: 55px;">`,
+						fmt.Sprintf("%.2f", calculateChange),
+						`%</td>`,
+					)
+				}
 			}
 			return template.HTML(t)
 		},
@@ -221,6 +243,17 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 				if minuteTimeReply == nil {
 					continue
 				}
+				////一天的数据是240
+				//if len(minuteTimeReply.Get().Data.List) < 240 {
+				//	//填充不足240部分
+				//	list := minuteTimeReply.Get().Data.List
+				//	ix := 240 - len(list)
+				//	fiData := list[len(list)-1]
+				//	for i := 0; i < ix; i++ {
+				//		list = append(list, fiData)
+				//	}
+				//	minuteTimeReply.Get().Data.List = list
+				//}
 				minuteTimes = append(minuteTimes, minuteTimeReply.Get().Data.List...)
 			}
 
@@ -233,6 +266,18 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 				prices = append(prices, fmt.Sprint(list[i].Price))
 			}
 			return gjson.New(prices).MustToJsonString()
+		},
+		"styleBorder1": func(code string) template.CSS {
+			if grand.Meet(10, 100) {
+				return template.CSS("border-top: 1px solid rgb(255,0,0);border-bottom: 1px solid rgb(255,0,0);")
+			}
+			return template.CSS("")
+		},
+		"styleBorder2": func(code string) template.CSS {
+			if grand.Meet(10, 100) {
+				return template.CSS("color: rgb(255,0,0);")
+			}
+			return template.CSS("")
 		},
 		"jsx": func(s string) template.JS {
 			return template.JS(strings.ReplaceAll(s, `"`, `\"`))
