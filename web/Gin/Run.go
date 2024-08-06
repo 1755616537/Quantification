@@ -11,10 +11,10 @@ import (
 	"github.com/gogf/gf/encoding/gjson"
 	"github.com/patrickmn/go-cache"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 	"strings"
 	"tdx/Quantification"
-	Public2 "tdx/Quantification/Public"
 	Public4 "tdx/web/Gin/Api/Public"
 	ZhongJianJian2 "tdx/web/Gin/Middleware"
 	"tdx/web/Gin/Public"
@@ -41,6 +41,12 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 	}
 
 	getRjJi.RiJiShuChuTiShiPrintln(__gin.QianZhuiMing, "启动中...")
+
+	//运行模式
+	gin.SetMode(gin.ReleaseMode)
+
+	//重定向标准输出
+	gin.DefaultWriter = ioutil.Discard
 
 	// 创建实例
 	router := gin.New()
@@ -183,7 +189,7 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 			return fmt.Sprint(Quantification.QuData[code].Snapshot.StockName)
 		},
 		"CalculateChange": func(code string) template.HTML {
-			calculateChange := Public2.CalculateChange(
+			calculateChange := utils.CalculateChange(
 				Quantification.QuData[code].Snapshot.Data.Price,
 				Quantification.QuData[code].Snapshot.Data.LastClose,
 			)
@@ -211,7 +217,7 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 			}
 			var minuteTimes []quotes.MinuteTime
 			for i := len(dateArr) - 1; i >= 0; i-- {
-				minuteTimeReply := Quantification.QuData[code].GetMinuteTimeReply(dateArr[i])
+				minuteTimeReply := Quantification.QuDataGet(code).GetMinuteTimeReply(dateArr[i])
 				if minuteTimeReply == nil {
 					continue
 				}
@@ -276,15 +282,6 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 				`
 console.log('Hello from dynamic JS!');
 				`,
-				//`var data = '<svg
-				//class='sparkline'
-				//width='+width+'
-				//height='+height+'
-				//>
-				//<g transform='translate(0, 2)'>
-				//<path d='+line(data)+'!} />
-				//</g>
-				//</svg>';`,
 			),
 		})
 	})
@@ -295,6 +292,74 @@ console.log('Hello from dynamic JS!');
 		//版本1
 		V1 := API.Group("/v1")
 		{
+			V1.GET("/update-trendThumbnail-bar", func(c *gin.Context) {
+				//quData := Quantification.QuData
+				//for _, data := range quData {
+				//	for _, reply := range data.MinuteTimeReply {
+				//		ns := grand.Intn(len(reply.Data.List))
+				//		reply.Data.List[ns].Price = reply.Data.List[ns].Price - 1
+				//	}
+				//}
+				c.HTML(http.StatusOK, "trendThumbnail/bar.tmpl", gin.H{
+					"QuZXGArrs": Quantification.Qu_ZXG_Arrs,
+					"QuData":    Quantification.QuData,
+					"js": fmt.Sprint(
+						`
+console.log('Hello from dynamic JS!');
+				`,
+					),
+				})
+			})
+
+			V1.POST("/GetQuData", func(c *gin.Context) {
+				quData := Quantification.QuData
+				if quData == nil {
+					c.JSON(http.StatusOK, gin.H{
+						"code": "1",
+						"msg":  "数据为空",
+					})
+				}
+
+				var quDataMinuteTimeReplyfunc map[string]string = make(map[string]string)
+				for _, data := range quData {
+					code := data.Snapshot.Data.Code
+					getQuDataMinuteTimeReplyfunc := func(code string) string {
+						date := time.Now()
+						dateArr, err := utils.DateAoArr(date, 2, true)
+						if err != nil {
+							return ""
+						}
+						var minuteTimes []quotes.MinuteTime
+						for i := len(dateArr) - 1; i >= 0; i-- {
+							minuteTimeReply := Quantification.QuDataGet(code).GetMinuteTimeReply(dateArr[i])
+							if minuteTimeReply == nil {
+								continue
+							}
+							minuteTimes = append(minuteTimes, minuteTimeReply.Get().Data.List...)
+						}
+
+						list := minuteTimes
+						if len(list) > 36 {
+							//list = list[:36]
+						}
+						var prices []string
+						for i := 0; i < len(list); i++ {
+							prices = append(prices, fmt.Sprint(list[i].Price))
+						}
+						return gjson.New(prices).MustToJsonString()
+					}
+					quDataMinuteTimeReplyfunc[code] = getQuDataMinuteTimeReplyfunc(code)
+				}
+
+				c.JSON(http.StatusOK, gin.H{
+					"code": http.StatusOK,
+					"msg":  "成功",
+					"data": gin.H{
+						"QuData":                    gjson.New(quData).MustToJsonString(),
+						"QuDataMinuteTimeReplyfunc": quDataMinuteTimeReplyfunc,
+					},
+				})
+			})
 			//公共路由
 			PublicApi := V1.Group("/Public")
 			{

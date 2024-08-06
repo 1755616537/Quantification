@@ -1,9 +1,9 @@
-{{ define "trendThumbnail/bar.html" }}
+{{ define "trendThumbnail/bar.tmpl" }}
 <div id="map">
     <div id="hover" style="left: 857px; top: 375px;margin: 0;padding: 0;height: 100%;">
 <!--        <h3 class="text-left">Consumer Defensive - Beverages - Non-Alcoholic</h3>-->
         <table class="">
-            <tbody>
+            <tbody id="tbody">
             {{range $key,$value := .QuZXGArrs}}
             <tr>
                 <td class="ticker text-gray-900" style="width: 60px;">{{GetQuDataStockName $value}}</td>

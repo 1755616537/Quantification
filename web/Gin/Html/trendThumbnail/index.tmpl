@@ -44,7 +44,7 @@
                     /*align-content: flex-start;*/
                     /*white-space: nowrap;*/
 
-                    display:block;
+                    display: block;
                     float: left;
 
                     border-top: 1px solid #25262b;
@@ -103,6 +103,7 @@
                             text-align: right;
                         }
                     }
+
                     &.is-empty,
                     &.is-empty td {
                         height: 12px;
@@ -136,35 +137,146 @@
         }
 
     </style>
-    <script src = "http://d3js.org/d3.v5.min.js"></script>
+    <script src="http://d3js.org/d3.v5.min.js"></script>
 </head>
 <body style="margin: 0;padding: 0;">
-{{template "trendThumbnail/bar.html" .}}
+<div id="middle">
+    {{template "trendThumbnail/bar.tmpl" .}}
+</div>
 <script type="text/javascript">
-    var d_hover = document.getElementById('hover');
-    var d_trArr = d_hover.getElementsByTagName('tr');
-    for (let ix = 0; ix < d_trArr.length; ix++) {
-        var d_td2 = d_trArr[ix].getElementsByTagName('td');
-        var d_svg = d_td2[1].getElementsByTagName('svg');
-        var d_svg_data = d_svg[0].getAttribute('data-v');
-        var d_svg_width = d_svg[0].getAttribute('width');
-        var d_svg_height = d_svg[0].getAttribute('height');
-        console.log(d_svg_data);
-        d_svg_data = JSON.parse(d_svg_data);
-        // d_svg_data=[175.15,175.45,176.15,175.82,178.02,177.41,178.06,179.79,180.9,179.87,179.46,183.11,182.19,180.31,181.08,182.09,179.27,177.99,173.38,171.15,170.48,172.9,171.23,173.89,173.49,173.2,171.04,165.9,165.07,163.83,163.33,163.81,166.14,166.48,166.68,167.28,168.08,167.35,166.74,166.26,164.93,162.89,163.58,162.6,164.39,162.12,161.9,163.59,163.95,166.38,163.86,164.76,169.89,170.37,169.36,167.66,166.28,168.17,171.02,172.75,173.21,173.18,172.67,174.96,178.04];
-        var x = d3.scaleLinear().range([0,d_svg_width]).domain([0, d_svg_data.length]);
-        var y = d3.scaleLinear().range([d_svg_height - 4, 0]).domain(d3.extent(d_svg_data, (d) => d));
-        var line = d3.line().curve(d3.curveBasis).x((d, i) => x(i)).y((d) => y(d));
-        var lineData = line(d_svg_data);
-        console.log(lineData);
+    // 刷新数据
+    var refreshData = function () {
+        var d_hover = document.getElementById('hover');
+        var d_trArr = d_hover.getElementsByTagName('tr');
+        for (let ix = 0; ix < d_trArr.length; ix++) {
+            var d_td2 = d_trArr[ix].getElementsByTagName('td');
+            var d_svg = d_td2[1].getElementsByTagName('svg');
+            var d_svg_data = d_svg[0].getAttribute('data-v');
+            var d_svg_width = d_svg[0].getAttribute('width');
+            var d_svg_height = d_svg[0].getAttribute('height');
+            // console.log(d_svg_data);
+            d_svg_data = JSON.parse(d_svg_data);
+            // d_svg_data=[175.15,175.45,176.15,175.82,178.02,177.41,178.06,179.79,180.9,179.87,179.46,183.11,182.19,180.31,181.08,182.09,179.27,177.99,173.38,171.15,170.48,172.9,171.23,173.89,173.49,173.2,171.04,165.9,165.07,163.83,163.33,163.81,166.14,166.48,166.68,167.28,168.08,167.35,166.74,166.26,164.93,162.89,163.58,162.6,164.39,162.12,161.9,163.59,163.95,166.38,163.86,164.76,169.89,170.37,169.36,167.66,166.28,168.17,171.02,172.75,173.21,173.18,172.67,174.96,178.04];
+            var x = d3.scaleLinear().range([0, d_svg_width]).domain([0, d_svg_data.length]);
+            var y = d3.scaleLinear().range([d_svg_height - 4, 0]).domain(d3.extent(d_svg_data, (d) => d));
+            var line = d3.line().curve(d3.curveBasis).x((d, i) => x(i)).y((d) => y(d));
+            var lineData = line(d_svg_data);
+            // console.log(lineData);
 
-        var d_g = d_svg[0].getElementsByTagName('g');
-        var d_path = d_g[0].getElementsByTagName('path');
-        d_path[0].setAttribute('d',lineData);
+            var d_g = d_svg[0].getElementsByTagName('g');
+            var d_path = d_g[0].getElementsByTagName('path');
+            d_path[0].setAttribute('d', lineData);
+        }
+    };
+
+    refreshData();
+
+    function fetchPOSTData(url, data = {}) {
+        return fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json(); // 解析 JSON 数据
+        }).catch(error => console.error('Error:', error)); // 处理错误
     }
 
+    var gerData = async function () {
+        var responseJson;
+        try {
+            // 请求数据
+            responseJson = await fetchPOSTData('http://localhost:8080/api/v1/GetQuData');
+        } catch (e) {
+            return false
+        }
+        if (responseJson.code == 200) {
+            var quData = JSON.stringify(responseJson.data.QuData)
+            var quDataMinuteTimeReplyfunc = responseJson.data.quDataMinuteTimeReplyfunc
 
-    {{ jsx .js }}
+            var d_hover = document.getElementById('hover');
+            var d_trArr = d_hover.getElementsByTagName('tr');
+            if (d_trArr.length == Object.keys(quData).length) {
+                // return true
+            }
+            for (let ix = 0; ix < d_trArr.length; ix++) {
+                var code = d_trArr[ix].Snapshot.Data.Code;
+                var currentPrice = d_trArr[ix].Snapshot.Data.Price;
+                var previousClosePrice = d_trArr[ix].Snapshot.Data.LastClose;
+                var change = (currentPrice - previousClosePrice) / previousClosePrice * 100;
+                var calculateChange = quDataMinuteTimeReplyfunc[code];
+                if (currentPrice >= previousClosePrice) {
+                    calculateChange =
+                        '<td class="change" style="color: rgb(59, 90, 80);width: 70px;">+' +
+                        calculateChange +
+                        change +
+                        '%</td>';
+                } else {
+                    calculateChange =
+                        '<td class="change" style="color: rgb(47, 158, 79);width: 70px;">' +
+                        calculateChange +
+                        change +
+                        '%</td>';
+                }
+
+                var getQuDataMinuteTimeReply = "";
+                var d_tbody = document.getElementById('tbody');
+                d_tbody.innerHTML =
+                    '<tr>\n' +
+                    '                <td class="ticker text-gray-900" style="width: 60px;">' + d_trArr[ix].Snapshot.StockName + '</td>\n' +
+                    '                <td>\n' +
+                    '                    <svg class="sparkline" width="65" height="25" data-v="' + getQuDataMinuteTimeReply + '">\n' +
+                    '                        <g transform="translate(0, 2)">\n' +
+                    '                            <path d=""></path>\n' +
+                    '                        </g>\n' +
+                    '                    </svg>\n' +
+                    '                </td>\n' +
+                    '                <td class="price text-gray-900" style="width: 50px;">' + d_trArr[ix].Snapshot.Data.Price + '</td>\n' +
+                    '                ' + calculateChange + '\n' +
+                    '            </tr>'
+                ;
+            }
+        }
+        return true
+    };
+
+    async function fetchData() {
+        async function loop() {
+            if (await gerData()) refreshData();
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            await loop();
+        }
+
+        await loop();
+    }
+
+    // fetchData().catch(console.error)
+
+    // setInterval(function () {
+    //     location.reload()
+    // },3000)
+
+    document.addEventListener("DOMContentLoaded", function () {
+        function updateHeader() {
+            fetch("/api/v1/update-trendThumbnail-bar")
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('middle').innerHTML = html;
+                    refreshData();
+                });
+        }
+
+        // 每隔一段时间更新一次
+        setInterval(updateHeader, 1000);
+    });
+
+    /*
+    {{ jsx .js}}
+     */
 </script>
 </body>
 </html>
