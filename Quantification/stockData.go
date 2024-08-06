@@ -70,6 +70,14 @@ type QuData_data struct {
 	TransactionReply map[uint32]TransactionReply
 	//除权除息信息
 	XdxrInfo XdxrInfo
+
+	//买卖意见
+	TradingAdvice TradingAdvice_data
+}
+
+type TradingAdvice_data struct {
+	Code int
+	Msg  string
 }
 
 // 判断 是否为空

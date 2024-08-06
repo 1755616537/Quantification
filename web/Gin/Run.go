@@ -10,6 +10,7 @@ import (
 	"github.com/alibaba/sentinel-golang/core/base"
 	"github.com/gin-gonic/gin"
 	"github.com/gogf/gf/encoding/gjson"
+	"github.com/gogf/gf/util/grand"
 	"github.com/patrickmn/go-cache"
 	"html/template"
 	"io/ioutil"
@@ -189,50 +190,94 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 		"GetQuDataStockName": func(code string) string {
 			return fmt.Sprint(Quantification.QuData[code].Snapshot.StockName)
 		},
+		"GetQuDataStockRate": func(code string) string {
+			return fmt.Sprint(Quantification.QuData[code].Snapshot.Data.Rate)
+		},
 		"CalculateChange": func(code string) template.HTML {
-			price := Quantification.QuData[code].Snapshot.Data.Price
-			lastClose := Quantification.QuData[code].Snapshot.Data.LastClose
+			data := Quantification.QuData[code]
+			price := data.Snapshot.Data.Price
+			lastClose := data.Snapshot.Data.LastClose
 			calculateChange := utils.CalculateChange(
 				price,
 				lastClose,
 			)
+			cnl := func(n float64) float64 {
+				var cn float64
+				if n >= 0 {
+					cn = 255 - (n * 50)
+					if cn > 180 {
+						cn = 180
+					} else if cn < 0 {
+						cn = 0
+					}
+				} else {
+					cn = 255 - (-n * 50)
+					if cn > 80 {
+						cn = 80
+					} else if cn < 0 {
+						cn = 0
+					}
+				}
+
+				return cn
+			}
 			var t string
 			if price == exchange.LimitUp(code, lastClose) {
 				//涨停
 				t = fmt.Sprint(
-					`<td class="change" style="color: rgb(200,200,0);width: 55px;">`,
-					fmt.Sprintf("%.2f", calculateChange),
-					`%</td>`,
+					`<td class="change" style="background: rgb(200,200,0);width: 55px;">`,
 				)
 			} else if price == utils.CalculateLimitDownPrice2(lastClose, exchange.MarketLimit(code)) {
 				//跌停
 				t = fmt.Sprint(
-					`<td class="change" style="color: rgb(0,34,255);width: 55px;">`,
-					fmt.Sprintf("%.2f", calculateChange),
-					`%</td>`,
+					`<td class="change" style="background: rgb(0,34,255);width: 55px;color: beige;">`,
 				)
 			} else {
 				//上涨
 				if price >= lastClose {
 					t = fmt.Sprint(
-						`<td class="change" style="color: rgb(255,0,0);width: 55px;">+`,
-						fmt.Sprintf("%.2f", calculateChange),
-						`%</td>`,
+						`<td class="change" style="background: rgb(255,`, cnl(calculateChange), `,`, cnl(calculateChange), `);width: 55px;">`,
 					)
 				} else {
 					//下跌
 					t = fmt.Sprint(
-						`<td class="change" style="color: rgb(8,255,0);width: 55px;">`,
-						fmt.Sprintf("%.2f", calculateChange),
-						`%</td>`,
+						`<td class="change" style="background: rgb(`, cnl(calculateChange), `,140,`, cnl(calculateChange), `);width: 55px;color: beige;">`,
 					)
 				}
 			}
+			t = fmt.Sprint(t,
+				`<div style="display: flex;justify-content: center;">`,
+				fmt.Sprintf("%.2f", calculateChange), "%",
+				`</div>`,
+			)
+			ns := grand.Meet(1, 100)
+			if ns {
+				data.TradingAdvice.Msg = "买"
+			}
+			ns = grand.Meet(1, 100)
+			if ns {
+				data.TradingAdvice.Msg = "卖"
+			}
+			if data.TradingAdvice.Msg != "" {
+				t = fmt.Sprint(t,
+					`<div style="display: flex;justify-content: center;background: rgb(204, 204, 204);font-size: 11.5px;opacity: 0.7;">`,
+					data.TradingAdvice.Msg,
+					`</div>`,
+				)
+			} else {
+				t = fmt.Sprint(t,
+					`<div style="display: flex;justify-content: center;font-size: 11.5px;">`,
+					`</div>`,
+				)
+			}
+			t = fmt.Sprint(t,
+				`</td>`,
+			)
 			return template.HTML(t)
 		},
 		"GetQuDataMinuteTimeReply": func(code string) string {
 			date := time.Now()
-			dateArr, err := utils.DateAoArr(date, 2, true)
+			dateArr, err := utils.DateAoArr(date, 3, true)
 			if err != nil {
 				return ""
 			}
@@ -267,29 +312,58 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 			return gjson.New(prices).MustToJsonString()
 		},
 		"styleBorder1": func(code string) template.CSS {
-			data := Quantification.QuData[code].Snapshot.Data
-			if data.Rate > 1 {
-				return template.CSS("border-top: 1px solid rgb(255,0,0);border-bottom: 1px solid rgb(255,0,0);")
-			} else if data.Rate < -1 {
-				return template.CSS("border-top: 1px solid rgb(8,255,0);border-bottom: 1px solid rgb(8,255,0);")
-			}
+			//data := Quantification.QuData[code].Snapshot.Data
+			//if data.Rate > 1 {
+			//	return template.CSS("border-top: 1px solid rgb(255,0,0);border-bottom: 1px solid rgb(255,0,0);")
+			//} else if data.Rate < -1 {
+			//	return template.CSS("border-top: 1px solid rgb(8,255,0);border-bottom: 1px solid rgb(8,255,0);")
+			//}
 			return template.CSS("")
 		},
 		"styleBorder2": func(code string) template.CSS {
 			data := Quantification.QuData[code].Snapshot.Data
+			//if data.Rate > 1 {
+			//	return template.CSS("color: rgb(255,0,0);")
+			//} else if data.Rate < -1 {
+			//	return template.CSS("color: rgb(8,255,0);")
+			//}
 			if data.Rate > 1 {
-				return template.CSS("color: rgb(255,0,0);")
+				return template.CSS("background: rgb(200,200,0);")
 			} else if data.Rate < -1 {
-				return template.CSS("color: rgb(8,255,0);")
+				return template.CSS("background: rgb(200,200,0);")
 			}
 			return template.CSS("")
 		},
 		"styleBorder3": func(code string) template.CSS {
 			data := Quantification.QuData[code].Snapshot.Data
-			if data.Rate > 1 {
-				return template.CSS("background: rgb(255,0,0);")
-			} else if data.Rate < -1 {
-				return template.CSS("background: rgb(8,255,0);")
+			if data.Rate > 0.5 {
+				return template.CSS(fmt.Sprint("background: rgb(255,", utils.ColorCLad(data.Rate), ",", utils.ColorCLad(data.Rate), ");"))
+			} else if data.Rate < -0.5 {
+				return template.CSS(fmt.Sprint("background: rgb(", utils.ColorCLad(data.Rate), ",140,", utils.ColorCLad(data.Rate), ");"))
+			}
+			return template.CSS("")
+		},
+		"styleBorder4": func(code string) template.CSS {
+			price := Quantification.QuData[code].Snapshot.Data.Price
+			lastClose := Quantification.QuData[code].Snapshot.Data.LastClose
+			calculateChange := utils.CalculateChange(
+				price,
+				lastClose,
+			)
+			if price == exchange.LimitUp(code, lastClose) {
+				//涨停
+				return template.CSS("background: rgb(200,200,0);")
+			} else if price == utils.CalculateLimitDownPrice2(lastClose, exchange.MarketLimit(code)) {
+				//跌停
+				return template.CSS("background: rgb(0,34,255);color: beige;")
+			} else {
+				//上涨
+				if price >= lastClose {
+					return template.CSS(fmt.Sprint(`background: rgb(255,`, utils.ColorCLad(calculateChange), `,`, utils.ColorCLad(calculateChange), `);`))
+				} else {
+					//下跌
+					return template.CSS(fmt.Sprint(`background: rgb(`, utils.ColorCLad(calculateChange), `,140,`, utils.ColorCLad(calculateChange), `);`))
+				}
 			}
 			return template.CSS("")
 		},

@@ -14,6 +14,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"sync"
 	"tdx/Public"
 	Publics "tdx/Quantification/Public"
 	"time"
@@ -26,13 +27,13 @@ var QuCodeSUrl = "C:\\通达信\\T0002\\blocknew/ZXG.blk"
 const QuDataUrl = "QuData"
 
 // 获取日线最大长度
-const IKGetMxLen = 30 * 1
+const IKGetMxLen = 30 * 6
 
 // 获取历史分时图数据最大天数
-const HistoryMinuteTimeDataGetMxLen = 2
+const HistoryMinuteTimeDataGetMxLen = 20
 
 // 获取历史分时成交最大天数
-const HistoryTransactionDataGetMxLen = 2
+const HistoryTransactionDataGetMxLen = 20
 
 // 缓存服务器地址
 // C:\Users\17556\.quant1x\meta\tdx.json
@@ -95,6 +96,11 @@ func inix() {
 
 	//读取缓存数据
 	if utils.IsExistFileCatalog(QuDataUrl) && getArrsBool {
+		//声明一个互斥锁
+		var mutex sync.Mutex
+		mutex.Lock()
+		defer mutex.Unlock()
+
 		fmt.Println("开始读取缓存数据...")
 
 		for i := 0; i < len(qu_ZXG_Arrs_); i++ {
@@ -670,7 +676,7 @@ func Run() {
 					//已经存在数据，跳过获取
 					{
 						minuteTimeReply := quData.GetMinuteTimeReply(dateAo)
-						if minuteTimeReply != nil {
+						if !minuteTimeReply.IsEmpty() {
 							continue
 						}
 					}
@@ -698,8 +704,8 @@ func Run() {
 					//已经存在数据，跳过获取
 					{
 						transactionReply := quData.GetTransactionReply(dateAo)
-						if transactionReply != nil {
-							//continue
+						if !transactionReply.IsEmpty() {
+							continue
 						}
 					}
 
