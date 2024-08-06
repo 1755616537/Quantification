@@ -213,7 +213,7 @@ func RunGin(iP string, duanKou int, _gin *Public.Gin, _err *error) *Public.Gin {
 			for i := len(dateArr) - 1; i >= 0; i-- {
 				minuteTimeReply := Quantification.QuData[code].GetMinuteTimeReply(dateArr[i])
 				if minuteTimeReply == nil {
-					return ""
+					continue
 				}
 				minuteTimes = append(minuteTimes, minuteTimeReply.Get().Data.List...)
 			}

@@ -127,9 +127,51 @@ func (s *QuData_data) SetFinanceInfo(d FinanceInfo) {
 
 // K线 修改
 func (s *QuData_data) SetSecurityBarsReply(ty int, d SecurityBarsReply_data_KLINE_TYPE) {
-	if s.IsEmpty() {
+	if s.IsEmpty() || d.IsEmpty() || d.Data.Count == 0 {
 		return
 	}
+
+	//更新数据
+	if d.Data.Count == 1 {
+		dv := d.Data.List[0]
+
+		var data *SecurityBarsReply_data_KLINE_TYPE
+
+		if ty == proto.KLINE_TYPE_5MIN {
+			data = s.SecurityBarsReply.KLINE_TYPE_5MIN.Get()
+		} else if ty == proto.KLINE_TYPE_15MIN {
+			data = s.SecurityBarsReply.KLINE_TYPE_15MIN.Get()
+		} else if ty == proto.KLINE_TYPE_30MIN {
+			data = s.SecurityBarsReply.KLINE_TYPE_30MIN.Get()
+		} else if ty == proto.KLINE_TYPE_1HOUR {
+			data = s.SecurityBarsReply.KLINE_TYPE_1HOUR.Get()
+		} else if ty == proto.KLINE_TYPE_DAILY {
+			data = s.SecurityBarsReply.KLINE_TYPE_DAILY.Get()
+		} else if ty == proto.KLINE_TYPE_WEEKLY {
+			data = s.SecurityBarsReply.KLINE_TYPE_WEEKLY.Get()
+		} else if ty == proto.KLINE_TYPE_MONTHLY {
+			data = s.SecurityBarsReply.KLINE_TYPE_MONTHLY.Get()
+		} else if ty == proto.KLINE_TYPE_1MIN {
+			data = s.SecurityBarsReply.KLINE_TYPE_1MIN.Get()
+		} else if ty == proto.KLINE_TYPE_3MONTH {
+			data = s.SecurityBarsReply.KLINE_TYPE_3MONTH.Get()
+		} else if ty == proto.KLINE_TYPE_YEARLY {
+			data = s.SecurityBarsReply.KLINE_TYPE_YEARLY.Get()
+		}
+		if data != nil {
+			ld := data.Data.List
+			for i := 0; i < len(ld); i++ {
+				if ld[i].Year == d.UpTime.Year() && ld[i].Month == int(d.UpTime.Month()) && ld[i].Day == d.UpTime.Day() {
+					data.Data.List[i] = dv
+					data.UpTime = d.UpTime
+					return
+					//d.Data=data.Data
+					//break
+				}
+			}
+		}
+	}
+
 	if ty == proto.KLINE_TYPE_5MIN {
 		s.SecurityBarsReply.KLINE_TYPE_5MIN = d
 	} else if ty == proto.KLINE_TYPE_15MIN {
