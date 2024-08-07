@@ -46,6 +46,9 @@ var Qu_ZXGx_Arrs []string
 // 自选股数据_没有前缀
 var Qu_ZXG_Arrs []string
 
+// 初始化完成
+var iniBool bool = false
+
 func init() {
 	goxlogger.SetLevel(goxlogger.ERROR)
 
@@ -391,6 +394,8 @@ func inix() {
 
 		slog.Info("结束读取缓存数据")
 	}
+
+	iniBool = true
 }
 
 func Exit() {
@@ -405,7 +410,7 @@ func Exit() {
 			//创建目录
 			err = os.MkdirAll(fmt.Sprintf("./%s", QuDataUrl), os.ModePerm)
 			if err != nil {
-				logger.Error(fmt.Sprint("创建", "股票数据文件", "目录", "失败"), err)
+				fmt.Println("创建", "股票数据文件", "目录失败-"+err.Error())
 			}
 		}
 
@@ -420,7 +425,7 @@ func Exit() {
 					//创建目录
 					err := os.MkdirAll(fmt.Sprintf("./%s", fileUrl), os.ModePerm)
 					if err != nil {
-						logger.Error(fmt.Sprint("创建", code, "目录", "失败"), err)
+						fmt.Println("创建", code, "目录失败-"+err.Error())
 						continue
 					}
 				}
@@ -592,6 +597,11 @@ func Exit() {
 }
 
 func Run() {
+	for {
+		if iniBool {
+			break
+		}
+	}
 	slog.Info("开始获取数据", Public.LogPrintln隔行符号)
 
 	var api = gotdx.GetTdxApi()
@@ -764,6 +774,16 @@ func Run() {
 						for i := 0; i < len(snapshot); i++ {
 							quData := QuDataGet(snapshot[i].Code)
 							if !quData.IsEmpty() {
+								//if exchange.CheckCallAuctionTime(time.Now()) {
+								//	snapshot[i].Price = snapshot[i].Bid1
+								//
+								//	//kLINE_TYPE_DAILY_data := quData.SecurityBarsReply.KLINE_TYPE_DAILY.Get()
+								//	//if !kLINE_TYPE_DAILY_data.IsEmpty() {
+								//	//	kLINE_TYPE_DAILY_data_list := kLINE_TYPE_DAILY_data.Data.List
+								//	//	snapshot[i].LastClose = kLINE_TYPE_DAILY_data_list[len(kLINE_TYPE_DAILY_data_list)-1].Close
+								//	//}
+								//}
+
 								quData.SetSnapshot(Snapshot{
 									time.Now(),
 									snapshot[i],
@@ -991,7 +1011,7 @@ func Run() {
 			// 获取当前时间
 			currentTime := time.Now()
 			if !(currentTime.Hour() == 9 && currentTime.Minute() < 30) {
-				slog.Warn("开盘竞价量监控【时间不在范围-结束】")
+				//slog.Warn("开盘竞价量监控【时间不在范围-结束】")
 				return
 			}
 			//targetTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 9, 30, 0, 0, currentTime.Location())
@@ -1007,6 +1027,8 @@ func Run() {
 				if snapshot == nil {
 					continue
 				}
+				//fmt.Println(snapshot.Data)
+				//{2024-08-07 sz000888 1 2 0 000888 0 0 12.9 0 0 0 09:24:12.606 9242101 0 0 0 0 0 0 450000 3915300 0 0 0 0 0 0 12.77 12.77 3066 3066 0 0 45 0 0 0 0 0 0 0 0 0 0 0 0 0 8 0 0 0 0 0 0 2024-08-07 09:24:41.488}
 				卖档1金额 := float64(snapshot.Data.AskVol1) * snapshot.Data.Ask1
 				if 卖档1金额 >= 卖金额阈值 {
 					监控列表add(监控列表_data{"开盘竞价量监控-卖", snapshot.Data.Code})
