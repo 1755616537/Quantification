@@ -15,7 +15,7 @@ func Test_codeTy(t *testing.T) {
 }
 
 func Test_ZXGGet(t *testing.T) {
-	a, b, err := ZXGGet("C:\\Users\\17556\\Desktop/1.txt")
+	a, b, err := QuListGet("C:\\Users\\17556\\Desktop/1.txt")
 	fmt.Println(a, b, err)
 	fmt.Println()
 }

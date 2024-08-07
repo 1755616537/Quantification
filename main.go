@@ -2,20 +2,24 @@ package main
 
 import (
 	"github.com/1755616537/utils"
-	"log"
+	"github.com/1755616537/utils/logger"
 	"tdx/Quantification"
 	"tdx/ZhiLingXiTong"
 	"tdx/web"
 )
 
 func init() {
-	//defer func() {
-	//	//恢复程序的控制权
-	//	err := recover()
-	//	if err != nil {
-	//		fmt.Println("init启动错误", err)
-	//	}
-	//}()
+	//启动日记
+	_, err := utils.RunRiJi(false)
+	if err != nil {
+		logger.Error("启动日记失败", err)
+		return
+	}
+
+	err = logger.IniLog()
+	if err != nil {
+		logger.Error("初始化日志配置失败", err)
+	}
 }
 
 func main() {
@@ -23,25 +27,25 @@ func main() {
 	//	//恢复程序的控制权
 	//	err := recover()
 	//	if err != nil {
-	//		fmt.Println("main启动错误", err)
+	//		logger.Error("main启动错误", err)
 	//	}
 	//}()
+
+	defer func() {
+		err := logger.Exit()
+		if err != nil {
+			logger.Error("退出日志配置失败", err)
+		}
+	}()
 
 	//注册结束事件 量化连接
 	defer Quantification.Exit()
 
-	//启动日记
-	RjJi, err := utils.RunRiJi(false)
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
-
 	//读配置文件信息=>设置全局配置
 	getConfigs := utils.GetConfigs{}
-	err = getConfigs.Run()
+	err := getConfigs.Ini()
 	if err != nil {
-		RjJi.RiJiShuChuJingGaoFatal(err.Error())
+		logger.Error("读取配置文件失败", err)
 		return
 	}
 	//

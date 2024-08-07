@@ -1,6 +1,8 @@
 package Quantification
 
-import "fmt"
+import (
+	"log/slog"
+)
 
 var 监控列表 []监控列表_data
 
@@ -12,5 +14,5 @@ type 监控列表_data struct {
 func 监控列表add(data 监控列表_data) {
 	监控列表 = append(监控列表, data)
 
-	fmt.Println("【监控列表】", data.类型, data.代码)
+	slog.Info("【监控列表】", data.类型, data.代码)
 }

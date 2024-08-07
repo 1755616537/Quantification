@@ -10,8 +10,10 @@ import (
 	"gitee.com/quant1x/gotdx/securities"
 	goxlogger "gitee.com/quant1x/gox/logger"
 	"github.com/1755616537/utils"
+	"github.com/1755616537/utils/logger"
 	"github.com/gogf/gf/encoding/gjson"
 	"io/ioutil"
+	"log/slog"
 	"os"
 	"strings"
 	"sync"
@@ -21,7 +23,7 @@ import (
 )
 
 // 股票代码列表文件路径
-var QuCodeSUrl = "C:\\通达信\\T0002\\blocknew/ZXG.blk"
+var QuCodeSUrl = "C:\\通达信\\T0002\\blocknew/GZ88888888.blk"
 
 // 股票数据文件路径
 const QuDataUrl = "QuData"
@@ -60,10 +62,10 @@ func inix() {
 
 	var err error
 
-	qu_ZXGx_Arrs, qu_ZXG_Arrs, err := ZXGGet(QuCodeSUrl)
+	qu_ZXGx_Arrs, qu_ZXG_Arrs, err := QuListGet(QuCodeSUrl)
 	//qu_ZXGx_Arrs, qu_ZXG_Arrs, err := ZXGGet("C:\\Users\\17556\\Desktop/1.txt")
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.Error("量化-获取股票列表失败", err)
 		return
 	}
 
@@ -101,7 +103,7 @@ func inix() {
 		mutex.Lock()
 		defer mutex.Unlock()
 
-		fmt.Println("开始读取缓存数据...")
+		slog.Info("开始读取缓存数据...")
 
 		for i := 0; i < len(qu_ZXG_Arrs_); i++ {
 			code := qu_ZXG_Arrs_[i]
@@ -128,7 +130,7 @@ func inix() {
 					var mapData []quotes.SecurityBar
 					err = json.Unmarshal([]byte(fileData), &mapData)
 					if err != nil {
-						fmt.Println("解析", code, "5 分钟 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("解析", code, "5 分钟 K线"), err)
 					} else {
 						quData.SetSecurityBarsReply(proto.KLINE_TYPE_5MIN, SecurityBarsReply_data_KLINE_TYPE{
 							time.Now(),
@@ -148,7 +150,7 @@ func inix() {
 					var mapData []quotes.SecurityBar
 					err = json.Unmarshal([]byte(fileData), &mapData)
 					if err != nil {
-						fmt.Println("解析", code, "15 分钟 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("解析", code, "15 分钟 K线"), err)
 					} else {
 						quData.SetSecurityBarsReply(proto.KLINE_TYPE_15MIN, SecurityBarsReply_data_KLINE_TYPE{
 							time.Now(),
@@ -168,7 +170,7 @@ func inix() {
 					var mapData []quotes.SecurityBar
 					err = json.Unmarshal([]byte(fileData), &mapData)
 					if err != nil {
-						fmt.Println("解析", code, "30 分钟 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("解析", code, "30 分钟 K线"), err)
 					} else {
 						quData.SetSecurityBarsReply(proto.KLINE_TYPE_30MIN, SecurityBarsReply_data_KLINE_TYPE{
 							time.Now(),
@@ -188,7 +190,7 @@ func inix() {
 					var mapData []quotes.SecurityBar
 					err = json.Unmarshal([]byte(fileData), &mapData)
 					if err != nil {
-						fmt.Println("解析", code, "1 小时 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("解析", code, "1 小时 K线"), err)
 					} else {
 						quData.SetSecurityBarsReply(proto.KLINE_TYPE_1HOUR, SecurityBarsReply_data_KLINE_TYPE{
 							time.Now(),
@@ -208,7 +210,7 @@ func inix() {
 					var mapData []quotes.SecurityBar
 					err = json.Unmarshal([]byte(fileData), &mapData)
 					if err != nil {
-						fmt.Println("解析", code, "日 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("解析", code, "日 K线"), err)
 					} else {
 						quData.SetSecurityBarsReply(proto.KLINE_TYPE_DAILY, SecurityBarsReply_data_KLINE_TYPE{
 							time.Now(),
@@ -228,7 +230,7 @@ func inix() {
 					var mapData []quotes.SecurityBar
 					err = json.Unmarshal([]byte(fileData), &mapData)
 					if err != nil {
-						fmt.Println("解析", code, "周 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("解析", code, "周 K线"), err)
 					} else {
 						quData.SetSecurityBarsReply(proto.KLINE_TYPE_WEEKLY, SecurityBarsReply_data_KLINE_TYPE{
 							time.Now(),
@@ -248,7 +250,7 @@ func inix() {
 					var mapData []quotes.SecurityBar
 					err = json.Unmarshal([]byte(fileData), &mapData)
 					if err != nil {
-						fmt.Println("解析", code, "月 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("解析", code, "月 K线"), err)
 					} else {
 						quData.SetSecurityBarsReply(proto.KLINE_TYPE_MONTHLY, SecurityBarsReply_data_KLINE_TYPE{
 							time.Now(),
@@ -268,7 +270,7 @@ func inix() {
 					var mapData []quotes.SecurityBar
 					err = json.Unmarshal([]byte(fileData), &mapData)
 					if err != nil {
-						fmt.Println("解析", code, "1 分钟 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("解析", code, "1 分钟 K线"), err)
 					} else {
 						quData.SetSecurityBarsReply(proto.KLINE_TYPE_1MIN, SecurityBarsReply_data_KLINE_TYPE{
 							time.Now(),
@@ -288,7 +290,7 @@ func inix() {
 					var mapData []quotes.SecurityBar
 					err = json.Unmarshal([]byte(fileData), &mapData)
 					if err != nil {
-						fmt.Println("解析", code, "季 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("解析", code, "季 K线"), err)
 					} else {
 						quData.SetSecurityBarsReply(proto.KLINE_TYPE_3MONTH, SecurityBarsReply_data_KLINE_TYPE{
 							time.Now(),
@@ -308,7 +310,7 @@ func inix() {
 					var mapData []quotes.SecurityBar
 					err = json.Unmarshal([]byte(fileData), &mapData)
 					if err != nil {
-						fmt.Println("解析", code, "年 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("解析", code, "年 K线"), err)
 					} else {
 						quData.SetSecurityBarsReply(proto.KLINE_TYPE_YEARLY, SecurityBarsReply_data_KLINE_TYPE{
 							time.Now(),
@@ -330,14 +332,14 @@ func inix() {
 						dateStr := utils.RemoveSuffix(list[i])
 						date, err := utils.TyUint32(dateStr)
 						if err != nil {
-							fmt.Println(err.Error())
+							logger.Error(fmt.Sprint(code, "分时图数据"), err)
 						} else {
 							fileData, err := ioutil.ReadFile(fmt.Sprint(fileUrl, "/", list[i]))
 							if err == nil {
 								var mapData []quotes.MinuteTime
 								err = json.Unmarshal([]byte(fileData), &mapData)
 								if err != nil {
-									fmt.Println("解析", code, "分时图数据", "失败-"+err.Error())
+									logger.Error(fmt.Sprint("解析", code, "分时图数据"), err)
 								} else {
 									quData.SetMinuteTimeReply(date, MinuteTimeReply{
 										time.Now(),
@@ -362,14 +364,14 @@ func inix() {
 						dateStr := utils.RemoveSuffix(list[i])
 						date, err := utils.TyUint32(dateStr)
 						if err != nil {
-							fmt.Println(err.Error())
+							logger.Error(fmt.Sprint(code, "分时成交"), err)
 						} else {
 							fileData, err := ioutil.ReadFile(fmt.Sprint(fileUrl, "/", list[i]))
 							if err == nil {
 								var mapData []quotes.TickTransaction
 								err = json.Unmarshal([]byte(fileData), &mapData)
 								if err != nil {
-									fmt.Println("解析", code, "分时成交", "失败-"+err.Error())
+									logger.Error(fmt.Sprint("解析", code, "分时成交"), err)
 								} else {
 									quData.SetTransactionReply(date, TransactionReply{
 										time.Now(),
@@ -387,7 +389,7 @@ func inix() {
 
 		}
 
-		fmt.Println("结束读取缓存数据")
+		slog.Info("结束读取缓存数据")
 	}
 }
 
@@ -396,20 +398,20 @@ func Exit() {
 
 	//保存缓存数据
 	if QuData != nil {
-		fmt.Println("开始保存缓存数据...")
+		slog.Info("开始保存缓存数据...")
 
 		var err error
 		if !utils.IsExistFileCatalog(QuDataUrl) {
 			//创建目录
 			err = os.MkdirAll(fmt.Sprintf("./%s", QuDataUrl), os.ModePerm)
 			if err != nil {
-				fmt.Println("创建", "股票数据文件", "目录失败-"+err.Error())
+				logger.Error(fmt.Sprint("创建", "股票数据文件", "目录", "失败"), err)
 			}
 		}
 
 		if err == nil {
 			for code := range QuData {
-				fmt.Println("开始保存", code, "数据...")
+				slog.Info("开始保存", code, "数据...")
 
 				quData := QuDataGet(code)
 
@@ -418,7 +420,7 @@ func Exit() {
 					//创建目录
 					err := os.MkdirAll(fmt.Sprintf("./%s", fileUrl), os.ModePerm)
 					if err != nil {
-						fmt.Println("创建", code, "目录失败-"+err.Error())
+						logger.Error(fmt.Sprint("创建", code, "目录", "失败"), err)
 						continue
 					}
 				}
@@ -428,120 +430,120 @@ func Exit() {
 					//创建目录
 					err := os.MkdirAll(fmt.Sprintf("./%s", fileUrl), os.ModePerm)
 					if err != nil {
-						fmt.Println("创建", code, "SecurityBarsReply", "目录失败-"+err.Error())
+						logger.Error(fmt.Sprint("创建", code, "SecurityBarsReply", "目录", "失败"), err)
 						continue
 					}
 				}
 
 				if !quData.SecurityBarsReply.KLINE_TYPE_5MIN.IsEmpty() {
-					fmt.Println("开始保存", code, "5 分钟 K线...")
+					slog.Info("开始保存", code, "5 分钟 K线...")
 
 					jsonx := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_5MIN.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/KLINE_TYPE_5MIN.json"))
 					if err != nil {
-						fmt.Println("保存", code, "5 分钟 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("保存", code, "5 分钟 K线"), err)
 					}
 				}
 
 				if !quData.SecurityBarsReply.KLINE_TYPE_15MIN.IsEmpty() {
-					fmt.Println("开始保存", code, "15 分钟 K线...")
+					slog.Info("开始保存", code, "15 分钟 K线...")
 
 					jsonx := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_15MIN.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/KLINE_TYPE_15MIN.json"))
 					if err != nil {
-						fmt.Println("保存", code, "15 分钟 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("保存", code, "15 分钟 K线"), err)
 					}
 				}
 
 				if !quData.SecurityBarsReply.KLINE_TYPE_30MIN.IsEmpty() {
-					fmt.Println("开始保存", code, "30 分钟 K线...")
+					slog.Info("开始保存", code, "30 分钟 K线...")
 
 					jsonx := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_30MIN.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/KLINE_TYPE_30MIN.json"))
 					if err != nil {
-						fmt.Println("保存", code, "30 分钟 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("保存", code, "30 分钟 K线"), err)
 					}
 				}
 
 				if !quData.SecurityBarsReply.KLINE_TYPE_1HOUR.IsEmpty() {
-					fmt.Println("开始保存", code, "1 小时 K线...")
+					slog.Info("开始保存", code, "1 小时 K线...")
 
 					jsonx := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_1HOUR.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/KLINE_TYPE_1HOUR.json"))
 					if err != nil {
-						fmt.Println("保存", code, "1 小时 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("保存", code, "1 小时 K线"), err)
 					}
 				}
 
 				if !quData.SecurityBarsReply.KLINE_TYPE_DAILY.IsEmpty() {
-					fmt.Println("开始保存", code, "日 K线...")
+					slog.Info("开始保存", code, "日 K线...")
 
 					jsonx := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_DAILY.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/KLINE_TYPE_DAILY.json"))
 					if err != nil {
-						fmt.Println("保存", code, "日 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("保存", code, "日 K线"), err)
 					}
 				}
 
 				if !quData.SecurityBarsReply.KLINE_TYPE_WEEKLY.IsEmpty() {
-					fmt.Println("开始保存", code, "周 K线...")
+					slog.Info("开始保存", code, "周 K线...")
 
 					jsonx := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_WEEKLY.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/KLINE_TYPE_WEEKLY.json"))
 					if err != nil {
-						fmt.Println("保存", code, "周 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("保存", code, "周 K线"), err)
 					}
 				}
 
 				if !quData.SecurityBarsReply.KLINE_TYPE_MONTHLY.IsEmpty() {
-					fmt.Println("开始保存", code, "月 K线...")
+					slog.Info("开始保存", code, "月 K线...")
 
 					jsonx := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_MONTHLY.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/KLINE_TYPE_MONTHLY.json"))
 					if err != nil {
-						fmt.Println("保存", code, "月 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("保存", code, "月 K线"), err)
 					}
 				}
 
 				if !quData.SecurityBarsReply.KLINE_TYPE_1MIN.IsEmpty() {
-					fmt.Println("开始保存", code, "1 分钟 K线...")
+					slog.Info("开始保存", code, "1 分钟 K线...")
 
 					jsonx := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_1MIN.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/KLINE_TYPE_1MIN.json"))
 					if err != nil {
-						fmt.Println("保存", code, "1 分钟 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("保存", code, "1 分钟 K线"), err)
 					}
 				}
 
 				if !quData.SecurityBarsReply.KLINE_TYPE_3MONTH.IsEmpty() {
-					fmt.Println("开始保存", code, "季 K线...")
+					slog.Info("开始保存", code, "季 K线...")
 
 					jsonx := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_3MONTH.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/KLINE_TYPE_3MONTH.json"))
 					if err != nil {
-						fmt.Println("保存", code, "季 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("保存", code, "季 K线"), err)
 					}
 				}
 
 				if !quData.SecurityBarsReply.KLINE_TYPE_YEARLY.IsEmpty() {
-					fmt.Println("开始保存", code, "年 K线...")
+					slog.Info("开始保存", code, "年 K线...")
 
 					jsonx := gjson.New(quData.SecurityBarsReply.KLINE_TYPE_YEARLY.Get().Data.List).MustToJsonString()
 					err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/KLINE_TYPE_YEARLY.json"))
 					if err != nil {
-						fmt.Println("保存", code, "年 K线", "失败-"+err.Error())
+						logger.Error(fmt.Sprint("保存", code, "年 K线"), err)
 					}
 				}
 
 				//分时图数据
 				if quData.MinuteTimeReply != nil {
-					fmt.Println("开始保存", code, "分时图数据...")
+					slog.Info("开始保存", code, "分时图数据...")
 					fileUrl := fmt.Sprint(QuDataUrl, "/", code, "/MinuteTimeReply")
 					if !utils.IsExistFileCatalog(fileUrl) {
 						//创建目录
 						err := os.MkdirAll(fmt.Sprintf("./%s", fileUrl), os.ModePerm)
 						if err != nil {
-							fmt.Println("创建", code, "MinuteTimeReply", "目录失败-"+err.Error())
+							logger.Error(fmt.Sprint("创建", code, "MinuteTimeReply", "目录", "失败"), err)
 							continue
 						}
 					}
@@ -552,7 +554,7 @@ func Exit() {
 						jsonx := gjson.New(minuteTimeReply.Get().Data.List).MustToJsonString()
 						err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/", key, ".json"))
 						if err != nil {
-							fmt.Println("保存", code, key, "MinuteTimeReply", "失败-"+err.Error())
+							logger.Error(fmt.Sprint("保存", code, key, "MinuteTimeReply"), err)
 							continue
 						}
 					}
@@ -560,13 +562,13 @@ func Exit() {
 
 				//分时成交
 				if quData.TransactionReply != nil {
-					fmt.Println("开始保存", code, "分时成交...")
+					slog.Info("开始保存", code, "分时成交...")
 					fileUrl := fmt.Sprint(QuDataUrl, "/", code, "/TransactionReply")
 					if !utils.IsExistFileCatalog(fileUrl) {
 						//创建目录
 						err := os.MkdirAll(fmt.Sprintf("./%s", fileUrl), os.ModePerm)
 						if err != nil {
-							fmt.Println("创建", code, "TransactionReply", "目录失败-"+err.Error())
+							logger.Error(fmt.Sprint("创建", code, "TransactionReply", "目录", "失败"), err)
 							continue
 						}
 					}
@@ -577,7 +579,7 @@ func Exit() {
 						jsonx := gjson.New(transactionReply.Get().Data.List).MustToJsonString()
 						err := utils.Setfile(jsonx, fmt.Sprint(fileUrl, "/", key, ".json"))
 						if err != nil {
-							fmt.Println("保存", code, key, "TransactionReply", "失败-"+err.Error())
+							logger.Error(fmt.Sprint("保存", code, key, "TransactionReply"), err)
 							continue
 						}
 					}
@@ -585,12 +587,12 @@ func Exit() {
 
 			}
 		}
-		fmt.Println("结束保存数据")
+		slog.Info("结束保存数据")
 	}
 }
 
 func Run() {
-	fmt.Println("开始数据操作", Public.LogPrintln隔行符号)
+	slog.Info("开始获取数据", Public.LogPrintln隔行符号)
 
 	var api = gotdx.GetTdxApi()
 
@@ -618,12 +620,12 @@ func Run() {
 
 		date, err := utils.DateTyUint32(time.Now())
 		if err != nil {
-			fmt.Println(err.Error())
+			logger.Error("获取数据", err)
 			return
 		}
 
 		//获取一次性数据
-		fmt.Println("开始获取一次性数据")
+		slog.Info("开始获取一次性数据")
 		for code := range QuData {
 
 			codeTypeTy := Publics.CodeTypeTy(code)
@@ -639,7 +641,7 @@ func Run() {
 						info,
 					})
 				} else {
-					fmt.Println("【数据获取失败】", "【基本面】", code)
+					logger.Error(fmt.Sprint("获取", code, "基本面"), err)
 				}
 			}
 
@@ -652,7 +654,7 @@ func Run() {
 						xdxrInfo,
 					})
 				} else {
-					fmt.Println("【数据获取失败】", "【除权除息信息】", code)
+					logger.Error(fmt.Sprint("获取", code, "除权除息信息"), err)
 				}
 			}
 
@@ -664,7 +666,7 @@ func Run() {
 					klines,
 				})
 			} else {
-				fmt.Println("【数据获取失败】", "【K线 日】", code)
+				logger.Error(fmt.Sprint("获取", code, "K线 日"), err)
 			}
 
 			//历史分时图数据
@@ -688,11 +690,11 @@ func Run() {
 							historyMinuteTimeData,
 						})
 					} else {
-						fmt.Println("【数据获取失败】", "【历史分时图数据】", code, dateAo)
+						logger.Error(fmt.Sprint("获取", code, "历史分时图数据"), err)
 					}
 				}
 			} else {
-				fmt.Println("【数据获取失败】", "【历史分时图数据】", code)
+				logger.Error(fmt.Sprint("获取", code, "历史分时图数据"), err)
 			}
 
 			//历史分时成交
@@ -727,7 +729,7 @@ func Run() {
 							//	break
 							//}
 						} else {
-							fmt.Println("【数据获取失败】", "【历史分时成交】", code, dateAo)
+							logger.Error(fmt.Sprint("获取", code, dateAo, "历史分时成交"), err)
 							break
 						}
 						start += 1
@@ -743,13 +745,13 @@ func Run() {
 					})
 				}
 			} else {
-				fmt.Println("【数据获取失败】", "【历史分时成交】", code)
+				logger.Error(fmt.Sprint("获取", code, "历史分时成交"), err)
 			}
 
 		}
 
 		//循环获取数据
-		fmt.Println("开始获取循环数据")
+		slog.Info("开始获取循环数据")
 		go func() {
 			for {
 				arrs := utils.SplitSliceIntoChunks(Qu_ZXG_Arrs, quotes.TDX_SECURITY_QUOTES_MAX)
@@ -793,7 +795,7 @@ func Run() {
 							minuteTimeData,
 						})
 					} else {
-						fmt.Println("【数据获取失败】", "【分时图数据】", code)
+						logger.Error(fmt.Sprint("获取", code, "分时图数据"), err)
 					}
 
 					//time.Sleep(time.Second * 1)
@@ -828,7 +830,7 @@ func Run() {
 							//	break
 							//}
 						} else {
-							fmt.Println("【数据获取失败】", "【分时成交】", code, date)
+							logger.Error(fmt.Sprint("获取", code, date, "分时成交"), err)
 							break
 						}
 						start += 1
@@ -919,7 +921,7 @@ func Run() {
 							klines,
 						})
 					} else {
-						fmt.Println("【数据获取失败】", "【K线 日】", code)
+						logger.Error(fmt.Sprint("获取", code, "K线 日"), err)
 					}
 
 					//K线 周
@@ -940,7 +942,7 @@ func Run() {
 							klines,
 						})
 					} else {
-						fmt.Println("【数据获取失败】", "【K线 月】", code)
+						logger.Error(fmt.Sprint("获取", code, "K线 月"), err)
 					}
 
 					//K线 1 分钟
@@ -951,7 +953,7 @@ func Run() {
 							klines,
 						})
 					} else {
-						fmt.Println("【数据获取失败】", "【K线 1 分钟】", code)
+						logger.Error(fmt.Sprint("获取", code, "K线 1 分钟"), err)
 					}
 					//K线 季
 					//klines, err = api.GetKLine(codeTypeTy, proto.KLINE_TYPE_3MONTH, 0, 1)
@@ -972,7 +974,7 @@ func Run() {
 							klines,
 						})
 					} else {
-						fmt.Println("【数据获取失败】", "【K线 日】", code)
+						logger.Error(fmt.Sprint("获取", code, "K线 年"), err)
 					}
 
 					//time.Sleep(time.Second * 1)
@@ -989,7 +991,7 @@ func Run() {
 			// 获取当前时间
 			currentTime := time.Now()
 			if !(currentTime.Hour() == 9 && currentTime.Minute() < 30) {
-				fmt.Println("开盘竞价量监控【时间不在范围-结束】")
+				slog.Warn("开盘竞价量监控【时间不在范围-结束】")
 				return
 			}
 			//targetTime := time.Date(currentTime.Year(), currentTime.Month(), currentTime.Day(), 9, 30, 0, 0, currentTime.Location())
@@ -1047,12 +1049,15 @@ func Run() {
 }
 
 // 自选股获取
-func ZXGGet(file string) (qu_ZXGx_Arrs []string, qu_ZXG_Arrs []string, err error) {
+func QuListGet(file string) (qu_ZXGx_Arrs []string, qu_ZXG_Arrs []string, err error) {
 	arrs, err := utils.LineByLine(file)
 	if err != nil {
 		return nil, nil, errors.New(fmt.Sprint("读取文本失败 ", err.Error()))
 	}
 	for i := 0; i < len(arrs); i++ {
+		if i == 120 {
+			break
+		}
 		string文本 := arrs[i]
 
 		if len(string文本) < 1 {
