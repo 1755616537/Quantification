@@ -36,6 +36,8 @@ github.com/1755616537/utils v0.0.0-20240807132626-b3d5e1ebf25a h1:V8p3rNreqTGk+g
 github.com/1755616537/utils v0.0.0-20240807132626-b3d5e1ebf25a/go.mod h1:xKhifYmSHk/q4ALDmMkffbwYq3C0igJciWwyL66CMBs=
 github.com/1755616537/utils v0.0.0-20240807142426-4f823aa55b4d h1:andRie+P7nppn2hjzaWAcwtz9U16pMYQcRZaMVZkCVA=
 github.com/1755616537/utils v0.0.0-20240807142426-4f823aa55b4d/go.mod h1:xKhifYmSHk/q4ALDmMkffbwYq3C0igJciWwyL66CMBs=
+github.com/1755616537/utils v0.0.0-20240807151437-5601c8a5eabd h1:1rTzkkrwkmGxJau8H01Vx/tZi4Jit1tRLj/ubWgysPI=
+github.com/1755616537/utils v0.0.0-20240807151437-5601c8a5eabd/go.mod h1:xKhifYmSHk/q4ALDmMkffbwYq3C0igJciWwyL66CMBs=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/toml v1.4.0 h1:kuoIxZQy2WRRk1pttg9asf+WVv6tWQuBNVmK8+nqPr0=
 github.com/BurntSushi/toml v1.4.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
@@ -283,6 +285,8 @@ github.com/mattn/go-runewidth v0.0.9 h1:Lm995f3rfxdpd6TSmuVCHVb/QhupuXlYr8sCI/Qd
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
 github.com/matttproud/golang_protobuf_extensions v1.0.1 h1:4hp9jkHxhMHkqkrB3Ix0jegS5sx/RkqARlsWZ6pIwiU=
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
+github.com/mdobak/go-xerrors v0.3.1 h1:XfqaLMNN5T4qsHSlLHGJ35f6YlDTVeINSYYeeuK4VpQ=
+github.com/mdobak/go-xerrors v0.3.1/go.mod h1:nIR+HMAJuj/uNqyp5+MTN6PJ7ymuIJq3UVs9QCgAHbY=
 github.com/miekg/dns v1.0.14/go.mod h1:W1PPwlIAgtquWBMBEV9nkV9Cazfe8ScdGz/Lj7v3Nrg=
 github.com/mitchellh/cli v1.0.0/go.mod h1:hNIlj7HEI86fIcpObd7a0FcrxTWetlwJDGcceTlRvqc=
 github.com/mitchellh/go-homedir v1.0.0/go.mod h1:SfyaCUpYCn1Vlf4IUYiD9fPX4A5wJrkLzIz1N1q0pr0=

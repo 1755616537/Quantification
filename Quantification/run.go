@@ -410,7 +410,7 @@ func Exit() {
 			//创建目录
 			err = os.MkdirAll(fmt.Sprintf("./%s", QuDataUrl), os.ModePerm)
 			if err != nil {
-				fmt.Println("创建", "股票数据文件", "目录失败-"+err.Error())
+				logger.Error(fmt.Sprint("创建", "股票数据文件", "目录", "失败"), err)
 			}
 		}
 
@@ -425,7 +425,7 @@ func Exit() {
 					//创建目录
 					err := os.MkdirAll(fmt.Sprintf("./%s", fileUrl), os.ModePerm)
 					if err != nil {
-						fmt.Println("创建", code, "目录失败-"+err.Error())
+						logger.Error(fmt.Sprint("创建", code, "目录", "失败"), err)
 						continue
 					}
 				}

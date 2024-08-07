@@ -14,8 +14,9 @@ require (
 )
 
 require (
-	github.com/1755616537/utils v0.0.0-20240807142426-4f823aa55b4d // indirect
+	github.com/1755616537/utils v0.0.0-20240807151437-5601c8a5eabd // indirect
 	github.com/dablelv/cyan v0.0.54 // indirect
+	github.com/mdobak/go-xerrors v0.3.1 // indirect
 )
 
 require (
