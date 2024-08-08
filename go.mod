@@ -4,6 +4,7 @@ go 1.22.2
 
 require (
 	gitee.com/quant1x/gotdx v1.22.20
+	github.com/1755616537/utils v0.0.0-20240807151437-5601c8a5eabd
 	github.com/alibaba/sentinel-golang v1.0.4
 	github.com/gin-gonic/gin v1.10.0
 	github.com/gorilla/websocket v1.5.3
@@ -14,14 +15,13 @@ require (
 )
 
 require (
-	github.com/1755616537/utils v0.0.0-20240807151437-5601c8a5eabd // indirect
 	github.com/dablelv/cyan v0.0.54 // indirect
 	github.com/mdobak/go-xerrors v0.3.1 // indirect
 )
 
 require (
-	gitee.com/quant1x/exchange v0.5.8 // indirect
-	gitee.com/quant1x/gox v1.21.4 // indirect
+	gitee.com/quant1x/exchange v0.5.8
+	gitee.com/quant1x/gox v1.21.4
 	gitee.com/quant1x/num v0.3.4 // indirect
 	gitee.com/quant1x/pkg v0.2.9 // indirect; indirectct
 	github.com/BurntSushi/toml v1.4.0 // indirect

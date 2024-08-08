@@ -1,0 +1,30 @@
+var map = {
+  "./abstocks.gridlist.cfg.json": "./ClientApp/config/abstocks.gridlist.cfg.json",
+  "./bonds.gridlist.cfg.json": "./ClientApp/config/bonds.gridlist.cfg.json",
+  "./borads.gridlist.cfg.json": "./ClientApp/config/borads.gridlist.cfg.json",
+  "./foreign.gridlist.cfg.json": "./ClientApp/config/foreign.gridlist.cfg.json",
+  "./gridlist.cfg.json": "./ClientApp/config/gridlist.cfg.json",
+  "./hkstocks.gridlist.cfg.json": "./ClientApp/config/hkstocks.gridlist.cfg.json",
+  "./indexes.gridlist.cfg.json": "./ClientApp/config/indexes.gridlist.cfg.json",
+  "./options.gridlist.cfg.json": "./ClientApp/config/options.gridlist.cfg.json"
+};
+
+
+function webpackContext(req) {
+var id = webpackContextResolve(req);
+return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+if(!__webpack_require__.o(map, req)) {
+var e = new Error("Cannot find module '" + req + "'");
+e.code = 'MODULE_NOT_FOUND';
+throw e;
+}
+return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./ClientApp/config sync recursive gridlist\\.cfg\\.json$";
