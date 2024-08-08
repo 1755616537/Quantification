@@ -2,8 +2,6 @@ package eastmoney
 
 import (
 	"fmt"
-	"github.com/1755616537/utils"
-	"github.com/gogf/gf/encoding/gjson"
 	"math/rand"
 	"time"
 )
@@ -117,8 +115,8 @@ func GetQtClist(fsty bool) ([]GetQtClist_data, error) {
 	fid := "f3"
 
 	//类型列表
-	//沪深A股
 	//fields := config.GetString("hushenAStock.fields")
+	//沪深A股
 	fields := "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f11,f62,f128,f136,f115,f152"
 
 	rand.Seed(time.Now().UnixNano())
@@ -145,24 +143,10 @@ func GetQtClist(fsty bool) ([]GetQtClist_data, error) {
 	)
 	//fmt.Println(httpUrl)
 
-	headers := make(map[string]string)
-	headers["Content-Type"] = "application/javascript; charset=UTF-8"
-	headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
-	headers["Access-Control-Allow-Origin"] = "*"
-	headers["Access-Control-Allow-Credentials"] = "true"
-	//headers["Connection"] = "close"
-	//headers["Cache-Control"] = "no-cache"
-	//headers["Cache-Length"] = fmt.Sprint(len(httpUrl))
-
-	_, ress, err := utils.HTTPGet2Headers("GET", httpUrl, nil, headers)
+	_, ressJsonData, err := HttpGet("GET", httpUrl, cb)
 	if err != nil {
 		return nil, err
 	}
-
-	//ressJsons := utils.GetBetweenStr(ress, utils.GetBetweenStr(ress, "jQuery", "("), ")")
-	ressJsons := utils.GetBetweenStr(ress, fmt.Sprint(cb, "("), ")")
-	ressJson := gjson.New(ressJsons)
-	ressJsonData := ressJson.GetArray("data.diff")
 
 	var data []GetQtClist_data
 	for _, v := range ressJsonData {
@@ -195,4 +179,9 @@ func GetQtClist(fsty bool) ([]GetQtClist_data, error) {
 	}
 
 	return data, nil
+}
+
+// 获取指数
+func GetQtUlistNp() {
+
 }
