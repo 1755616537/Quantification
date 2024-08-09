@@ -8,56 +8,56 @@ import (
 
 type GetQtClist_data struct {
 	//股票代码 f12
-	Code GetQtClist_data_string
+	Code String
 	//名称 f14
-	Name GetQtClist_data_string
+	Name String
 	//最新价           f2
-	Close GetQtClist_data_string
+	Close String
 	//涨跌幅           f3
-	ChangePercent GetQtClist_data_string
+	ChangePercent String
 	//涨跌额           f4
-	Change GetQtClist_data_string
+	Change String
 	//成交量(手) f5
-	Volume GetQtClist_data_string
+	Volume String
 	//成交额 f6
-	Amount GetQtClist_data_string
+	Amount String
 	//振幅 f7
-	Amplitude GetQtClist_data_string
+	Amplitude String
 	//最高 f15
-	Hign GetQtClist_data_string
+	Hign String
 	//最低 f16
-	Low GetQtClist_data_string
+	Low String
 	//今开 f17
-	Open GetQtClist_data_string
+	Open String
 	//昨收 f18
-	PreviousClose GetQtClist_data_string
+	PreviousClose String
 	//量比 f10
-	VolumeRate GetQtClist_data_string
+	VolumeRate String
 	//换手率 f8
-	TurnoverRate GetQtClist_data_string
+	TurnoverRate String
 	//市盈率(动态) f9
-	PERation GetQtClist_data_string
+	PERation String
 	//市净率 f23
-	PB GetQtClist_data_string
+	PB String
 	//总市值 f20
-	TMC GetQtClist_data_string
+	TMC String
 	//流通市值 f21
-	CMC GetQtClist_data_string
+	CMC String
 	//60日涨跌幅 f24
-	DPC60 GetQtClist_data_string
+	DPC60 String
 	//年初至今涨跌幅 f25
-	YearToDate GetQtClist_data_string
+	YearToDate String
 	//涨速 f22
-	RateOfIncrease GetQtClist_data_string
+	RateOfIncrease String
 	//5分钟涨跌 f11
-	MPC5 GetQtClist_data_string
+	MPC5 String
 	//加自选 addzixuan
-	Links GetQtClist_data_string
+	Links String
 }
 
-type GetQtClist_data_string string
+type String string
 
-func (r GetQtClist_data_string) Get() string {
+func (r String) Get() string {
 	if r == "-" {
 		return ""
 	}
@@ -152,29 +152,29 @@ func GetQtClist(fsty bool) ([]GetQtClist_data, error) {
 	for _, v := range ressJsonData {
 		vm := v.(map[string]interface{})
 		data = append(data, GetQtClist_data{
-			Code:           GetQtClist_data_string(fmt.Sprint(vm["f12"])),
-			Name:           GetQtClist_data_string(fmt.Sprint(vm["f14"])),
-			Close:          GetQtClist_data_string(fmt.Sprint(vm["f3"])),
-			ChangePercent:  GetQtClist_data_string(fmt.Sprint(vm["f3"])),
-			Change:         GetQtClist_data_string(fmt.Sprint(vm["f4"])),
-			Volume:         GetQtClist_data_string(fmt.Sprint(vm["f5"])),
-			Amount:         GetQtClist_data_string(fmt.Sprintf("%.f", vm["f6"])),
-			Amplitude:      GetQtClist_data_string(fmt.Sprint(vm["f7"])),
-			Hign:           GetQtClist_data_string(fmt.Sprint(vm["f15"])),
-			Low:            GetQtClist_data_string(fmt.Sprint(vm["f16"])),
-			Open:           GetQtClist_data_string(fmt.Sprint(vm["f17"])),
-			PreviousClose:  GetQtClist_data_string(fmt.Sprint(vm["f18"])),
-			VolumeRate:     GetQtClist_data_string(fmt.Sprint(vm["f10"])),
-			TurnoverRate:   GetQtClist_data_string(fmt.Sprint(vm["f8"])),
-			PERation:       GetQtClist_data_string(fmt.Sprint(vm["f9"])),
-			PB:             GetQtClist_data_string(fmt.Sprint(vm["f23"])),
-			TMC:            GetQtClist_data_string(fmt.Sprintf("%.f", vm["f20"])),
-			CMC:            GetQtClist_data_string(fmt.Sprintf("%.f", vm["f21"])),
-			DPC60:          GetQtClist_data_string(fmt.Sprint(vm["f24"])),
-			YearToDate:     GetQtClist_data_string(fmt.Sprint(vm["f25"])),
-			RateOfIncrease: GetQtClist_data_string(fmt.Sprint(vm["f22"])),
-			MPC5:           GetQtClist_data_string(fmt.Sprint(vm["f11"])),
-			//Links:        GetQtClist_data_string(fmt.Sprint(vm["addzixuan"])),
+			Code:           String(fmt.Sprint(vm["f12"])),
+			Name:           String(fmt.Sprint(vm["f14"])),
+			Close:          String(fmt.Sprint(vm["f3"])),
+			ChangePercent:  String(fmt.Sprint(vm["f3"])),
+			Change:         String(fmt.Sprint(vm["f4"])),
+			Volume:         String(fmt.Sprint(vm["f5"])),
+			Amount:         String(fmt.Sprintf("%.f", vm["f6"])),
+			Amplitude:      String(fmt.Sprint(vm["f7"])),
+			Hign:           String(fmt.Sprint(vm["f15"])),
+			Low:            String(fmt.Sprint(vm["f16"])),
+			Open:           String(fmt.Sprint(vm["f17"])),
+			PreviousClose:  String(fmt.Sprint(vm["f18"])),
+			VolumeRate:     String(fmt.Sprint(vm["f10"])),
+			TurnoverRate:   String(fmt.Sprint(vm["f8"])),
+			PERation:       String(fmt.Sprint(vm["f9"])),
+			PB:             String(fmt.Sprint(vm["f23"])),
+			TMC:            String(fmt.Sprintf("%.f", vm["f20"])),
+			CMC:            String(fmt.Sprintf("%.f", vm["f21"])),
+			DPC60:          String(fmt.Sprint(vm["f24"])),
+			YearToDate:     String(fmt.Sprint(vm["f25"])),
+			RateOfIncrease: String(fmt.Sprint(vm["f22"])),
+			MPC5:           String(fmt.Sprint(vm["f11"])),
+			//Links:        String(fmt.Sprint(vm["addzixuan"])),
 		})
 	}
 
